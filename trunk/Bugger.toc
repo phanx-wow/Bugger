@@ -1,0 +1,32 @@
+## Interface: 50400
+## Version: wowi:revision
+
+## Title: Bugger
+## Notes: Shows the errors captured by !BugGrabber.
+## Notes-deDE: Zeigt den von !BugGrabber gefangenen Fehler.
+## Notes-esES: Muestra los errors capturados por !BugGrabber.
+## Notes-esMX: Muestra los errors capturados por !BugGrabber.
+
+## Author: Phanx
+## X-Email: addons@phanx.net
+## X-Copyright: Copyright (c) 2014 Phanx. All rights reserved.
+## X-License: See the accompanying LICENSE file for information.
+## X-CompatibleLocales: deDE, enUS, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
+## X-Localizations: deDE, enUS, esES, esMX
+## X-Curse-Project-ID:
+## X-WoWI-ID:
+
+## SavedVariables: BuggerDB
+## OptionalDeps: !BugGrabber
+## X-BugGrabber-Display: Bugger
+
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
+Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
+Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
+Libs\PhanxAddonStub\AddonStub.lua
+
+Localization.lua
+
+Bugger.lua
+Options.lua
