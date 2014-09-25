@@ -1,10 +1,16 @@
+if not BugGrabber then
+	return DEFAULT_CHAT_FRAME:AddMessage("Bugger requires !BugGrabber.")
+end
+
 local ADDON, addon = ...
 local L = addon.L
 Bugger = addon
 
-local ICON_GRAY  = "Interface\\AddOns\\Bugger\\Bug-Gray"
-local ICON_GREEN = "Interface\\AddOns\\Bugger\\Bug-Green"
-local ICON_RED   = "Interface\\AddOns\\Bugger\\Bug-Red"
+local MIN_INTERVAL = 10
+
+local ICON_GRAY  = "Interface\\AddOns\\Bugger\\Icons\\Bug-Gray"
+local ICON_GREEN = "Interface\\AddOns\\Bugger\\Icons\\Bug-Green"
+local ICON_RED   = "Interface\\AddOns\\Bugger\\Icons\\Bug-Red"
 
 if GetLocale() == "deDE" then
 	L["Errors"] = "Fehler"
@@ -58,8 +64,6 @@ addon.dataObject = {
 }
 
 function addon:OnLoad()
-	-- TODO: register for BugGrabber callbacks
-
 	LibStub("LibDataBroker-1.1"):NewDataObject(ADDON, self.dataObject)
 
 	-- Only create a minimap icon if the user doesn't have another Broker display
@@ -85,11 +89,24 @@ function addon:OnLoad()
 end
 
 function addon:OnLogin()
-	-- nothing to do here?
+	BugGrabber.RegisterCallback(self, "BugGrabber_BugGrabbed")
+
+	local session = BugGrabber:GetSessionId()
+	for i, err in next, BugGrabber:GetDB() do
+		if err.session == session then
+			self:BugGrabber_BugGrabbed()
+			break
+		end
+	end
 end
 
 function addon:OnLogout()
 	-- nothing to do here?
+end
+
+function addon:Reset()
+	BugGrabber:Reset()
+	self:Print(L["All saved errors have been deleted."])
 end
 
 --[[
@@ -104,16 +121,19 @@ end
 ]]
 function addon:BugGrabber_BugGrabbed(errorObject)
 	self.dataObject.icon = ICON_RED
-	if self.db.chat then
-		DEFAULT_CHAT_FRAME:AddMessage("|cffff9f7fBugger:|r " .. L["An error has been captured!"])
+	if (self.lastError or 0) + MIN_INTERVAL < GetTime() then
+		if self.db.chat then
+			self:Print(L["An error has been captured!"])
+		end
+		if self.db.sound then
+			PlaySoundFile(self.db.sound, "Master")
+		end
 	end
-	if self.db.sound then
-		PlaySoundFile(self.db.sound, "Master")
-	end
+	self.lastError = GetTime()
 end
 
 function addon:BugGrabber_CapturePaused()
-	self.dataObject.icon = ICON_GRAY
+	-- self.dataObject.icon = ICON_GRAY
 	-- TODO: how to detect when it's resumed?
 end
 
@@ -123,61 +143,82 @@ function addon:FormatError(errorTable)
 end
 ]]
 
-function addon:CreateUI()
-	local frame = CreateFrame("Frame", "BuggerFrame", UIParent, "UIPanelDialogTemplate")
-	self.frame = frame
-
-	frame:Hide()
-	frame:SetMovable(true)
-	frame:SetClampedToScreen(true)
-	frame:SetToplevel(true)
-	frame:SetSize(384, 260)
-	frame:SetPoint("CENTER")
-
-	local index = frame:CreateFontString(nil, "ARTWORK", "GameFontNormalCenter")
-	index:SetSize(70, 16)
-	index:SetPoint("BOTTOMLEFT", 208, 16)
-	frame.index = index
-
-	local title = CreateFrame("Button", nil, frame)
-	title:SetPoint("TOPLEFT", "BuggerFrameTitleBG")
-	title:SetPoint("TOPRIGHT", "BuggerFrameTitleBG")
-	title:RegisterForDrag("LeftButton")
-	title:SetScript("OnDragStart", function() frame:StartMoving() end)
-	title:SetScript("OnDragStop", function() frame:StopMovingOrSizing() end)
-	frame.title = title
-
-	local scroll = CreateFrame("ScrollFrame", "$parentScrollFrame", frame, "UIPanelScrollFrameTemplate")
-	scroll:SetSize(343, 194)
-	scroll:SetPoint("TOPLEFT", 12, -30)
-	frame.scrollFrame = scroll
-
-	local edit = CreateFrame("EditBox", nil, scroll)
-	scroll:SetScrollChild(edit)
-
-	edit:SetMultiLine(true)
-	edit:SetAutoFocus(false)
-	edit:SetSize(343, 914)
-	edit:SetFontObject(GameFontHighlightSmall)
-	edit:SetScript("OnCursorChanged", ScrollingEdit_OnCursorChanged)
-	edit:SetScript("OnEscapePressed", EditBox_ClearFocus)
-	edit:SetScript("OnEditFocusGained", function(self) self:HighlightText(0) end)
-	edit:SetScript("OnUpdate", function(self, elapsed) ScrollingEdit_OnUpdate(self, elapsed, scroll) end)
-	frame.editBox = edit
-
-	local prev = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
-end
-
 function addon:ToggleUI()
-	if self.frame and self.frame:IsShown() then
+	if self.frame:IsShown() then
 		self.frame:Hide()
 	else
-		if not self.frame then
-			self:CreateUI()
-		end
-		self.frame:Show()
+		self:ShowError(self.currentIndex)
 	end
 end
 
-function addon:ShowError(id, session)
+function addon:FormatError(err)
+
+end
+
+function addon:ShowError(id)
+	local db = BugGrabber:GetDB()
+	local total, first, last = 0
+		if db then
+		local session = BugGrabber:GetSessionId()
+		for i, err in next, db do
+			if err.session == session then
+				total = total + 1
+				first = first or i
+				last = i
+			end
+		end
+	end
+	if not db or #db == 0 or total == 0 then
+		return self.frame and self.frame:Hide()
+	end
+
+	if not self.frame then
+		self:SetupFrame()
+	end
+
+	if not id then
+		id = #db -- default to most recent error
+	end
+
+	local err = db[id]
+
+	if not err then
+		err = db[#db]
+	end
+
+	local old = #db - total
+	self.frame.indexLabel:SetFormattedText(INDEX_ORDER_FORMAT, id - old, total)
+
+	self.editBox:SetText(err.message)
+	self.editBox:HighlightText(0)
+	self.editBox:SetCursorPosition(0)
+
+	self.scrollFrame:SetVerticalScroll(0)
+
+	self.frame.previous:SetEnabled(id > first)
+	self.frame.next:SetEnabled(id < last)
+
+	self.frame:Show()
+end
+
+function addon:SetupFrame()
+	if not IsAddOnLoaded("Blizzard_DebugTools") then
+		LoadAddOn("Blizzard_DebugTools")
+	end
+
+	ScriptErrorsFrame_OnError = function() end
+	ScriptErrorsFrame_Update = function() end
+
+	self.frame = ScriptErrorsFrame
+	self.frame:SetScript("OnShow", nil)
+	
+	self.scrollFrame = ScriptErrorsFrameScrollFrame
+
+	self.editBox = ScriptErrorsFrameScrollFrameText
+	self.editBox:SetFontObject(GameFontHighlightSmall)
+	
+	self.frame.previous:SetScript("OnClick", function()
+	end)
+	self.frame.next:SetScript("OnClick", function()
+	end)
 end
