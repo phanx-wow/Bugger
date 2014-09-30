@@ -1,7 +1,11 @@
 local BUGGER, Bugger = ...
-_G[BUGGER] = Bugger
 
-local L = Bugger.L
+if not BugGrabber then
+	function Bugger:OnLogin()
+		DEFAULT_CHAT_FRAME:AddMessage(L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."])
+	end
+	return
+end
 
 ------------------------------------------------------------------------
 
@@ -21,6 +25,10 @@ local ICON_GREEN = "Interface\\AddOns\\Bugger\\Icons\\Bug-Green"
 local ICON_RED   = "Interface\\AddOns\\Bugger\\Icons\\Bug-Red"
 
 local ERRORS, CURRENT_SESSION
+
+local L = Bugger.L
+
+_G[BUGGER] = Bugger
 
 ------------------------------------------------------------------------
 
