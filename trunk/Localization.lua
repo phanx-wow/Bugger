@@ -11,6 +11,7 @@ if GetLocale() == "deDE" then
 	L["All saved errors have been deleted."] = "Alle gespeicherten Fehler wurden gelöscht."
 	L["Shift-click to reload the UI."] = "Shift-klick, um die UI neuzuladen."
 	L["Right-click for options."] = "Rechtsklick für Optionen."
+	L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Ohne !BugGrabber kann Bugger nicht funktionieren. Findet es auf Curse oder WoWInterface."
 	L["/bugger"] = "/fehler"
 
 elseif GetLocale():match("^es") then
@@ -23,6 +24,7 @@ elseif GetLocale():match("^es") then
 	L["All saved errors have been deleted."] = "Todos los errores guardados se han borrados."
 	L["Shift-click to reload the UI."] = "Mayús-clic para recargar la IU."
 	L["Right-click for options."] = "Clic derecho para opciones."
+	L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger no puede funcionar sin !BugGrabber. Encuentralo en Curse o WoWInterface."
 	L["/bugger"] = "/errores"
 
 end
