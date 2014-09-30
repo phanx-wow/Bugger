@@ -17,7 +17,7 @@
 ## X-WoWI-ID:
 
 ## SavedVariables: BuggerDB
-## Dependencies: !BugGrabber
+## OptionalDependencies: !BugGrabber
 ## X-BugGrabber-Display: Bugger
 
 Libs\LibStub\LibStub.lua
