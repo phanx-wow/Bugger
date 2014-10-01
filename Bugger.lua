@@ -7,6 +7,8 @@ if not BugGrabber then
 	return
 end
 
+_G[BUGGER] = Bugger
+
 ------------------------------------------------------------------------
 
 Bugger.db = "BuggerDB"
@@ -24,11 +26,16 @@ local ICON_GRAY  = "Interface\\AddOns\\Bugger\\Icons\\Bug-Gray"
 local ICON_GREEN = "Interface\\AddOns\\Bugger\\Icons\\Bug-Green"
 local ICON_RED   = "Interface\\AddOns\\Bugger\\Icons\\Bug-Red"
 
-local ERRORS, CURRENT_SESSION
-
 local L = Bugger.L
 
-_G[BUGGER] = Bugger
+local c = {
+	BLUE   = BATTLENET_FONT_COLOR_CODE,
+	GOLD   = NORMAL_FONT_COLOR_CODE,
+	GRAY   = "|cff9f9f9f",
+	GREEN  = "|cff7fff7f",
+	ORANGE = "|cffff9f7f",
+	PURPLE = "|cff9f7fff",
+}
 
 ------------------------------------------------------------------------
 
@@ -40,38 +47,33 @@ Bugger.dataObject = {
 	OnClick = function(self, button)
 		if button == "RightButton" then
 			-- TODO: options
-		elseif IsShiftKeyDown() then
+		elseif IsControlKeyDown() then
 			ReloadUI()
 		elseif IsAltKeyDown() then
-			Bugger:Reset()
+			BugGrabber:Reset()
 		else
 			Bugger:ToggleFrame()
 		end
 	end,
 	OnTooltipShow = function(tt)
-		local total = 0
-		for i = #ERRORS, 1, -1 do
-			if ERRORS[i].session ~= CURRENT_SESSION then
-				break
-			end
-			total = total + 1
-		end
+		local total = Bugger:GetNumErrors()
 
 		tt:AddDoubleLine(BUGGER, total > 0 and total or "", nil, nil, nil, 1, 1, 1)
 
 		if total > 0 then
 			tt:AddLine(" ")
+			local errors = BugGrabber:GetDB()
 			for i = 1, min(total, 3) do
-				local err = ERRORS[#ERRORS + 1 - i]
-				tt:AddLine(format("%s%d.|r %s", GRAY_FONT_COLOR_CODE, total + 1 - i, Bugger:FormatError(err, true)), 1, 1, 1)
+				local err = errors[#errors + 1 - i]
+				tt:AddLine(format("%s%d.|r %s", c.GRAY, total + 1 - i, Bugger:FormatError(err, true)), 1, 1, 1)
 			end
 			tt:AddLine(" ")
 		end
 
 		tt:AddLine(L["Click to open the error window."])
 		tt:AddLine(L["Alt-click to clear all saved errors."])
-		tt:AddLine(L["Shift-click to reload the UI."])
-		tt:AddLine(L["Right-click for options."])
+		tt:AddLine(L["Ctrl-click to reload the UI."])
+	--	tt:AddLine(L["Right-click for options."]) -- TODO
 	end,
 }
 
@@ -103,15 +105,9 @@ function Bugger:OnLoad()
 end
 
 function Bugger:OnLogin()
-	ERRORS = BugGrabber:GetDB()
-	CURRENT_SESSION = BugGrabber:GetSessionId()
-
 	BugGrabber.RegisterCallback(self, "BugGrabber_BugGrabbed")
-
-	for i = #ERRORS, 1, -1 do
-		if ERRORS[i].session == CURRENT_SESSION then
-			return self:BugGrabber_BugGrabbed()
-		end
+	if self:GetNumErrors() > 0 then
+		return self:BugGrabber_BugGrabbed()
 	end
 end
 
@@ -119,11 +115,37 @@ function Bugger:OnLogout()
 	-- nothing to do here?
 end
 
-function Bugger:Reset()
-	BugGrabber:Reset()
-	self:Print(L["All saved errors have been deleted."])
-	self.dataObject.icon = ICON_GREEN
-	self.dataObject.text = 0
+hooksecurefunc(BugGrabber, "Reset", function()
+	Bugger:Print(L["All saved errors have been deleted."])
+
+	Bugger.dataObject.icon = ICON_GREEN
+	Bugger.dataObject.text = 0
+end)
+
+function Bugger:GetNumErrors(session)
+	local errors = BugGrabber:GetDB()
+	local total = #errors
+	if total == 0 then return end
+
+	if session == "all" then
+		return total, 1, total
+	end
+
+	if session == "previous" then
+		session = BugGrabber:GetSessionId() - 1
+	else
+		session = BugGrabber:GetSessionId()
+	end
+
+	local total, first, last = 0
+	for i = 1, #errors do
+		if errors[i].session == session then
+			total = total + 1
+			first = first or i
+			last = i
+		end
+	end
+	return total, first, last
 end
 
 ------------------------------------------------------------------------
@@ -138,14 +160,8 @@ end
 		counter = 1,
 	}
 ]]
-function Bugger:BugGrabber_BugGrabbed(errorObject)
-	local n = 0
-	for i = #ERRORS, 1, -1 do
-		if ERRORS[i].session == CURRENT_SESSION then
-			n = n + 1
-		end
-	end
-	self.dataObject.text = n
+function Bugger:BugGrabber_BugGrabbed(callback, err)
+	self.dataObject.text = self:GetNumErrors()
 	self.dataObject.icon = ICON_RED
 
 	if (self.lastError or 0) + MIN_INTERVAL < GetTime() then
@@ -159,17 +175,12 @@ function Bugger:BugGrabber_BugGrabbed(errorObject)
 	self.lastError = GetTime()
 end
 
-function Bugger:BugGrabber_CapturePaused()
-	-- self.dataObject.icon = ICON_GRAY
-	-- TODO: how to detect when it's resumed?
-end
-
 ------------------------------------------------------------------------
 
 do
-	local FILE_TEMPLATE   = GRAY_FONT_COLOR_CODE .. "%1\\|r%2:" .. GREEN_FONT_COLOR_CODE .. "%3|r:"
-	local STRING_TEMPLATE = GRAY_FONT_COLOR_CODE .. "%1[string |r\"" .. BATTLENET_FONT_COLOR_CODE .. "%2\"|r" .. GRAY_FONT_COLOR_CODE .. "]|r:" .. GREEN_FONT_COLOR_CODE .. "%3|r" .. GRAY_FONT_COLOR_CODE .. "%4|r%5"
-	local NAME_TEMPLATE   = BATTLENET_FONT_COLOR_CODE .. "'%1'|r"
+	local FILE_TEMPLATE   = c.GRAY .. "%1%2\\|r%3:" .. c.GREEN .. "%4|r" .. c.GRAY .. "%5|r%6"
+	local STRING_TEMPLATE = c.GRAY .. "%1[string |r\"" .. c.BLUE .. "%2\"|r" .. c.GRAY .. "]|r:" .. c.GREEN .. "%3|r" .. c.GRAY .. "%4|r%5"
+	local NAME_TEMPLATE   = c.BLUE .. "'%1'|r"
 
 	function Bugger:FormatStack(message, stack)
 		message = message and tostring(message)
@@ -178,7 +189,7 @@ do
 		if stack then
 			message = message .. "\n" .. stack
 		end
-		message = gsub(message, "Interface\\(%a+)\\(.-%.[lx][um][al]):(%d+):", FILE_TEMPLATE)
+		message = gsub(message, "(<?)Interface\\A?d?d?[Oo]?n?s?\\?(%a+)\\(.-%.[lx][um][al]):(%d+)(>?)(:?)", FILE_TEMPLATE)
 		message = gsub(message, "(<?)%[string \"(.-)\"]:(%d+)(>?)(:?)", STRING_TEMPLATE)
 		message = gsub(message, "['`]([^`']+)'", NAME_TEMPLATE)
 		return message
@@ -186,20 +197,27 @@ do
 end
 
 do
-	local LOCALS_TEMPLATE = "\n\n" .. NORMAL_FONT_COLOR_CODE .. "Locals:|r\n%s"
-	local LOCAL_STRING = "%1 " .. GRAY_FONT_COLOR_CODE .. "=|r " .. BATTLENET_FONT_COLOR_CODE .. "\"%2\""
+	local LOCALS_TEMPLATE = "\n\n" .. c.GOLD .. "Locals:|r%s"
+	local EQUALS  = c.GRAY .. " = |r"
+	local BOOLEAN = EQUALS .. c.PURPLE .. "%1"
+	local NUMBER  = EQUALS .. c.ORANGE .. "%1"
+	local STRING  = EQUALS .. c.BLUE .. "\"%1\""
+	-- TODO: color other types
 
 	function Bugger:FormatLocals(locals)
 		locals = locals and tostring(locals)
 		if not locals then return "" end
-		locals = gsub(locals, "(%a+) = \"(.-)\"\n", LOCAL_STRING)
+		locals = "\n" .. locals
+		locals = gsub(locals, " = ([ft][ar][lu]s?e)", BOOLEAN)
+		locals = gsub(locals, " = (%d+)", NUMBER)
+		locals = gsub(locals, " = \"(.-)\"", STRING)
 		return format(LOCALS_TEMPLATE, locals)
 	end
 end
 
 do
-	local FULL_TEMPLATE = "%d" .. GRAY_FONT_COLOR_CODE .. "x|r %s%s"
-	local SHORT_TEMPLATE = "%s " .. GRAY_FONT_COLOR_CODE .. "(x%d)|r"
+	local FULL_TEMPLATE = "%d" .. c.GRAY .. "x|r %s%s"
+	local SHORT_TEMPLATE = "%s " .. c.GRAY .. "(x%d)|r"
 
 	function Bugger:FormatError(err, short)
 		if short then
@@ -216,44 +234,34 @@ function Bugger:ShowError(index)
 		self:SetupFrame()
 	end
 
-	local total, first, last = 0
-	for i = 1, #ERRORS do
-		if ERRORS[i].session == CURRENT_SESSION then
-			total = total + 1
-			first = first or i
-			last = i
-		end
-	end
-
 	self.frame:Show()
 
-	if not ERRORS or #ERRORS == 0 or total == 0 then
-		print(ERRORS and "db." or "NO DB!", ERRORS and #ERRORS or "", total)
-		self.currentError = 0
-		self.editBox:SetText(GRAY_FONT_COLOR_CODE .. L["No errors have been captured."])
+	local total, first, last = self:GetNumErrors(self.session)
+
+	if total == 0 then
+		self.current = 0
+		self.editBox:SetText(c.GRAY .. L["There are no errors to display."])
 		self.editBox:SetCursorPosition(0)
 		self.editBox:ClearFocus()
 		self.scrollFrame:SetVerticalScroll(0)
 		self.previous:Disable()
 		self.next:Disable()
-		self.clear:Disable()
+		self.clear:SetEnabled(#AllErrors > 0)
 		return
 	end
 
-	if not index or index < first or index > last then
-		index = #ERRORS -- default to most recent error
-	end
-
-	local err = ERRORS[index]
-
+	local errors = BugGrabber:GetDB()
+	local err = index and index >= first and index <= last and errors[index]
 	if not err then
-		err = ERRORS[#ERRORS]
+		index = last
+		err = errors[index]
 	end
 
-	self.currentError = index
+	self.first, self.last, self.current = first, last, index
+	
+	-- TODO: set title text
 
-	local old = #ERRORS - total
-	self.indexLabel:SetFormattedText("%d / %d", index - old, total)
+	self.indexLabel:SetFormattedText("%d / %d", index + 1 - first, total)
 
 	self.editBox:SetText(self:FormatError(err))
 	self.editBox:SetCursorPosition(strlen(err.message))
@@ -267,6 +275,14 @@ function Bugger:ShowError(index)
 end
 
 ------------------------------------------------------------------------
+
+function Bugger:SwitchSession(session)
+	if session ~= "all" and session ~= "previous" then
+		session = "current"
+	end
+	self.session = session
+	self:ShowError()
+end
 
 function Bugger:ToggleFrame()
 	if self.frame and self.frame:IsShown() then
@@ -282,7 +298,7 @@ function Bugger:SetupFrame()
 	end
 
 	ScriptErrorsFrame_OnError = function() end
-	ScriptErrorsFrame_Update = function() end
+	ScriptErrorsFrame_Update  = function() end
 
 	self.frame       = ScriptErrorsFrame
 	self.scrollFrame = ScriptErrorsFrameScrollFrame
@@ -295,24 +311,30 @@ function Bugger:SetupFrame()
 
 	self.frame:SetParent(UIParent)
 	self.frame:SetScript("OnShow", nil)
-	tinsert(UISpecialFrames, self.frame) -- close on Escape
 
 	self.editBox:SetFontObject(GameFontHighlight)
 	self.editBox:SetTextColor(0.9, 0.9, 0.9)
 
 	local addWidth = 150
 	self.frame:SetWidth(self.frame:GetWidth() + addWidth)
-	self.scrollFrame:SetWidth(self.scrollFrame:GetWidth() + addWidth)
+	self.scrollFrame:SetWidth(self.scrollFrame:GetWidth() + addWidth - 4)
 	self.editBox:SetWidth(self.editBox:GetWidth() + addWidth)
 
 	local addHeight = 50
 	self.frame:SetHeight(self.frame:GetHeight() + addHeight)
-	self.scrollFrame:SetHeight(self.scrollFrame:GetHeight() + addHeight)
+	self.scrollFrame:SetHeight(self.scrollFrame:GetHeight() + addHeight - 4)
+
+	self.scrollFrame:SetPoint("TOPLEFT", 16, -32)
+	self.scrollFrame.ScrollBar:SetPoint("TOPLEFT", self.scrollFrame, "TOPRIGHT", 6, -13)
 
 	self.clear:ClearAllPoints()
 	self.clear:SetPoint("BOTTOMLEFT", 12, 12)
 	self.clear:SetText(CLEAR_ALL)
-	self.clear:SetScript("OnClick", function() self:Reset() self:ShowError() end)
+	self.clear:SetWidth(self.clear:GetFontString():GetStringWidth() + 20)
+	self.clear:SetScript("OnClick", function()
+		BugGrabber:Reset()
+		self:ShowError()
+	end)
 
 	self.next:ClearAllPoints()
 	self.next:SetPoint("BOTTOMRIGHT", -10, 12)
@@ -325,31 +347,27 @@ function Bugger:SetupFrame()
 	self.indexLabel:SetPoint("RIGHT", self.previous, "LEFT", -4, 0)
 	self.indexLabel:SetJustifyH("CENTER")
 
-	self.currentError = 0
+	self.current = 0
 
 	self.previous:SetScript("OnClick", function()
 		if IsShiftKeyDown() then
-			for i = 1, #ERRORS do
-				if ERRORS[i].session == CURRENT_SESSION then
-					return self:ShowError(i)
-				end
-			end
+			self:ShowError(self.first)
 		else
-			self:ShowError(self.currentError - 1)
+			self:ShowError(self.current - 1)
 		end
 	end)
 
 	self.next:SetScript("OnClick", function()
 		if IsShiftKeyDown() then
-			for i = #ERRORS, 1, -1 do
-				if ERRORS[i].session == CURRENT_SESSION then
-					return self:ShowError(i)
-				end
-			end
+			self:ShowError(self.last)
 		else
-			self:ShowError(self.currentError + 1)
+			self:ShowError(self.current + 1)
 		end
 	end)
+	
+	-- TODO: add tabs along the bottom
+	
+	-- TODO: add button for opening options
 end
 
 ------------------------------------------------------------------------
@@ -360,7 +378,7 @@ SLASH_BUGGER2 = L["/bugger"]
 SlashCmdList["BUGGER"] = function(cmd)
 	cmd = strlower(strtrim(cmd or ""))
 	if cmd == "reset" then
-		Bugger:Reset()
+		BugGrabber:Reset()
 	else
 		Bugger:ToggleFrame()
 	end
