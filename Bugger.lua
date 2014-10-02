@@ -46,8 +46,9 @@ Bugger.dataObject = {
 	label = L["Errors"],
 	OnClick = function(self, button)
 		if button == "RightButton" then
-			-- TODO: options
-		elseif IsControlKeyDown() then
+			-- level, value, dropDownFrame, anchorName, xOffset, yOffset, menuList, button, autoHideDelay
+			ToggleDropDownMenu(nil, nil, Bugger.menu, self, 0, 0, nil, nil, 10)
+		elseif IsShiftKeyDown() then
 			ReloadUI()
 		elseif IsAltKeyDown() then
 			BugGrabber:Reset()
@@ -72,8 +73,8 @@ Bugger.dataObject = {
 
 		tt:AddLine(L["Click to open the error window."])
 		tt:AddLine(L["Alt-click to clear all saved errors."])
-		tt:AddLine(L["Ctrl-click to reload the UI."])
-	--	tt:AddLine(L["Right-click for options."]) -- TODO
+		tt:AddLine(L["Shift-click to reload the UI."])
+		tt:AddLine(L["Right-click for options."])
 	end,
 }
 
@@ -111,9 +112,7 @@ function Bugger:OnLogin()
 	end
 end
 
-function Bugger:OnLogout()
-	-- nothing to do here?
-end
+------------------------------------------------------------------------
 
 hooksecurefunc(BugGrabber, "Reset", function()
 	Bugger:Print(L["All saved errors have been deleted."])
@@ -122,10 +121,12 @@ hooksecurefunc(BugGrabber, "Reset", function()
 	Bugger.dataObject.text = 0
 end)
 
+------------------------------------------------------------------------
+
 function Bugger:GetNumErrors(session)
 	local errors = BugGrabber:GetDB()
 	local total = #errors
-	if total == 0 then return end
+	if total == 0 then return 0 end
 
 	if session == "all" then
 		return total, 1, total
@@ -181,6 +182,7 @@ do
 	local FILE_TEMPLATE   = c.GRAY .. "%1%2\\|r%3:" .. c.GREEN .. "%4|r" .. c.GRAY .. "%5|r%6"
 	local STRING_TEMPLATE = c.GRAY .. "%1[string |r\"" .. c.BLUE .. "%2\"|r" .. c.GRAY .. "]|r:" .. c.GREEN .. "%3|r" .. c.GRAY .. "%4|r%5"
 	local NAME_TEMPLATE   = c.BLUE .. "'%1'|r"
+	local IN_C = c.GOLD .. "[C]|r" .. c.GRAY .. ":|r"
 
 	function Bugger:FormatStack(message, stack)
 		message = message and tostring(message)
@@ -189,7 +191,10 @@ do
 		if stack then
 			message = message .. "\n" .. stack
 		end
-		message = gsub(message, "(<?)Interface\\A?d?d?[Oo]?n?s?\\?(%a+)\\(.-%.[lx][um][al]):(%d+)(>?)(:?)", FILE_TEMPLATE)
+		message = gsub(message, "Interface\\", "")
+		message = gsub(message, "AddOns\\", "")
+		message = gsub(message, "%[C%]", IN_C)
+		message = gsub(message, "(<?)(%a+)\\(.-%.[lx][um][al]):(%d+)(>?)(:?)", FILE_TEMPLATE)
 		message = gsub(message, "(<?)%[string \"(.-)\"]:(%d+)(>?)(:?)", STRING_TEMPLATE)
 		message = gsub(message, "['`]([^`']+)'", NAME_TEMPLATE)
 		return message
@@ -198,19 +203,25 @@ end
 
 do
 	local LOCALS_TEMPLATE = "\n\n" .. c.GOLD .. "Locals:|r%s"
+	local FILE_TEMPLATE   = c.GRAY .. "%1\\|r%2:" .. c.GREEN .. "%3|r"
+	local GRAY    = c.GRAY .. "%1|r"
 	local EQUALS  = c.GRAY .. " = |r"
-	local BOOLEAN = EQUALS .. c.PURPLE .. "%1"
-	local NUMBER  = EQUALS .. c.ORANGE .. "%1"
-	local STRING  = EQUALS .. c.BLUE .. "\"%1\""
+	local BOOLEAN = EQUALS .. c.PURPLE .. "%1|r"
+	local NUMBER  = EQUALS .. c.ORANGE .. "%1|r"
+	local STRING  = EQUALS .. c.BLUE .. "\"%1\"|r"
 	-- TODO: color other types
 
 	function Bugger:FormatLocals(locals)
 		locals = locals and tostring(locals)
 		if not locals then return "" end
 		locals = "\n" .. locals
-		locals = gsub(locals, " = ([ft][ar][lu]s?e)", BOOLEAN)
-		locals = gsub(locals, " = (%d+)", NUMBER)
-		locals = gsub(locals, " = \"(.-)\"", STRING)
+		locals = gsub(locals, "> {\n}", ">")
+		locals = gsub(locals, "%(%*temporary%)", GRAY)
+		locals = gsub(locals, "(<[a-z]+>)", GRAY)
+		locals = gsub(locals, " = ([ftn][ari][lu]s?e?)", BOOLEAN)
+		locals = gsub(locals, " = ([0-9%.%-]+)", NUMBER)
+		locals = gsub(locals, " = \"([^\"]+)\"", STRING)
+		locals = gsub(locals, "Interface\\A?d?d?[Oo]?n?s?\\?(%a+)\\(.-%.[lx][um][al]):([0-9]+)", FILE_TEMPLATE)
 		return format(LOCALS_TEMPLATE, locals)
 	end
 end
@@ -236,30 +247,37 @@ function Bugger:ShowError(index)
 
 	self.frame:Show()
 
+	local errors = BugGrabber:GetDB()
 	local total, first, last = self:GetNumErrors(self.session)
 
 	if total == 0 then
-		self.current = 0
+		self.error = 0
 		self.editBox:SetText(c.GRAY .. L["There are no errors to display."])
 		self.editBox:SetCursorPosition(0)
 		self.editBox:ClearFocus()
 		self.scrollFrame:SetVerticalScroll(0)
+		self.title:SetText(LUA_ERROR)
+		self.indexLabel:SetText("")
 		self.previous:Disable()
 		self.next:Disable()
-		self.clear:SetEnabled(#AllErrors > 0)
+		self.clear:SetEnabled(#errors > 0)
 		return
 	end
 
-	local errors = BugGrabber:GetDB()
 	local err = index and index >= first and index <= last and errors[index]
 	if not err then
 		index = last
 		err = errors[index]
 	end
 
-	self.first, self.last, self.current = first, last, index
-	
-	-- TODO: set title text
+	self.first, self.last, self.error = first, last, index
+
+	local sdiff = BugGrabber:GetSessionId() - err.session
+	if self.session == "all" and sdiff > 0 then
+		self.title:SetFormattedText("%s %s(%d)|r", err.time, c.GRAY, sdiff)
+	else
+		self.title:SetText(err.time)
+	end
 
 	self.indexLabel:SetFormattedText("%d / %d", index + 1 - first, total)
 
@@ -276,21 +294,39 @@ end
 
 ------------------------------------------------------------------------
 
-function Bugger:SwitchSession(session)
+function Bugger:ShowSession(session)
 	if session ~= "all" and session ~= "previous" then
 		session = "current"
 	end
+	
+	if not self.frame then
+		self:SetupFrame()
+	end
+
+	for i = 1, #self.tabs do
+		local tab = self.tabs[i]
+		if tab.session == session then
+			PanelTemplates_SelectTab(tab)
+		else
+			PanelTemplates_DeselectTab(tab)
+		end
+	end
+
 	self.session = session
 	self:ShowError()
 end
+
+------------------------------------------------------------------------
 
 function Bugger:ToggleFrame()
 	if self.frame and self.frame:IsShown() then
 		self.frame:Hide()
 	else
-		self:ShowError()
+		self:ShowSession()
 	end
 end
+
+------------------------------------------------------------------------
 
 function Bugger:SetupFrame()
 	if not IsAddOnLoaded("Blizzard_DebugTools") then
@@ -347,13 +383,14 @@ function Bugger:SetupFrame()
 	self.indexLabel:SetPoint("RIGHT", self.previous, "LEFT", -4, 0)
 	self.indexLabel:SetJustifyH("CENTER")
 
-	self.current = 0
+	self.error = 0
+	self.session = "current"
 
 	self.previous:SetScript("OnClick", function()
 		if IsShiftKeyDown() then
 			self:ShowError(self.first)
 		else
-			self:ShowError(self.current - 1)
+			self:ShowError(self.error - 1)
 		end
 	end)
 
@@ -361,13 +398,44 @@ function Bugger:SetupFrame()
 		if IsShiftKeyDown() then
 			self:ShowError(self.last)
 		else
-			self:ShowError(self.current + 1)
+			self:ShowError(self.error + 1)
 		end
 	end)
-	
-	-- TODO: add tabs along the bottom
-	
+
+	local tabLevel = self.frame:GetFrameLevel()
+	local tabWidth = (self.frame:GetWidth() - 16) / 3
+	local function clickTab(tab)
+		Bugger:ShowSession(tab.session)
+	end
+	self.tabs = {}
+	self.frame:SetFrameLevel(tabLevel + 1)
+	for i = 1, 3 do
+		local tab = CreateFrame("Button", "$parentTab"..i, self.frame, "CharacterFrameTabButtonTemplate")
+		tab:UnregisterAllEvents()
+		tab:SetScript("OnEvent", nil)
+		tab:SetScript("OnClick", clickTab)
+		tab:SetScript("OnShow",  nil)
+		tab:SetScript("OnEnter", nil)
+		tab:SetScript("OnLeave", nil)
+		tab:SetFrameLevel(tabLevel)
+		PanelTemplates_TabResize(tab, 0, tabWidth) --, tabWidth, tabWidth)
+		self.tabs[i] = tab
+	end
+
+	self.tabs[1].session = "all"
+	self.tabs[1]:SetText(L["All Errors"])
+	self.tabs[1]:SetPoint("TOPLEFT", self.frame, "BOTTOMLEFT", 8, 7)
+
+	self.tabs[2].session = "previous"
+	self.tabs[2]:SetText(L["Previous Session"])
+	self.tabs[2]:SetPoint("TOPLEFT", self.tabs[1], "TOPRIGHT")
+
+	self.tabs[3].session = "current"
+	self.tabs[3]:SetText(L["Current Session"])
+	self.tabs[3]:SetPoint("TOPLEFT", self.tabs[2], "TOPRIGHT")
+
 	-- TODO: add button for opening options
+	-- maybe a little gear by the close button at the top
 end
 
 ------------------------------------------------------------------------
@@ -383,3 +451,66 @@ SlashCmdList["BUGGER"] = function(cmd)
 		Bugger:ToggleFrame()
 	end
 end
+
+------------------------------------------------------------------------
+
+local menu = CreateFrame("Frame", "BuggerMenu", UIParent, "UIDropDownMenuTemplate")
+menu.displayMode = "MENU"
+
+menu.chatFunc = function(self, arg1, arg2, checked)
+	Bugger.db.chat = checked
+end
+
+menu.soundFunc = function(self, arg1, arg2, checked)
+	Bugger.db.sound = checked
+end
+
+menu.iconFunc = function(self, arg1, arg2, checked)
+	Bugger.db.minimap.hide = not checked
+	LibStub("LibDBIcon-1.0"):Refresh(BUGGER, Bugger.db.minimap)
+end
+
+menu.closeFunc = function()
+	CloseDropDownMenus()
+end
+
+menu.initialize = function(_, level)
+	if not level then return end
+
+	local info = UIDropDownMenu_CreateInfo()
+	info.text = BUGGER
+	info.isTitle = 1
+	info.notCheckable = 1
+	UIDropDownMenu_AddButton(info, level)
+	
+	info = UIDropDownMenu_CreateInfo()
+	info.text = L["Chat frame alerts"]
+	info.func = menu.chatFunc
+	info.checked = Bugger.db.chat
+	info.keepShownOnClick = 1
+	UIDropDownMenu_AddButton(info, level)
+--[[ TODO
+	info = UIDropDownMenu_CreateInfo()
+	info.text = L["Sound alerts"]
+	info.func = menu.soundFunc
+	info.checked = Bugger.db.sound
+	info.keepShownOnClick = 1
+	UIDropDownMenu_AddButton(info, level)
+]]
+	if LibStub("LibDBIcon-1.0"):IsRegistered(BUGGER) then
+		info = UIDropDownMenu_CreateInfo()
+		info.text = L["Minimap icon"]
+		info.func = menu.iconFunc
+		info.checked = not Bugger.db.minimap.hide
+		info.keepShownOnClick = 1
+		UIDropDownMenu_AddButton(info, level)
+	end
+
+	info = UIDropDownMenu_CreateInfo()
+	info.text = CLOSE
+	info.func = menu.closeFunc
+	info.notCheckable = 1
+	UIDropDownMenu_AddButton(info, level)
+end
+
+Bugger.menu = menu
