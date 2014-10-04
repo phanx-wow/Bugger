@@ -1,3 +1,12 @@
+--[[--------------------------------------------------------------------
+	Bugger
+	Basic GUI front-end for !BugGrabber.
+	Copyright (c) 2014 Phanx. All rights reserved.
+	See the accompanying README and LICENSE files for more information.
+	http://www.wowinterface.com/downloads/info23144-Bugger.html
+	http://www.curse.com/addons/wow/bugger
+----------------------------------------------------------------------]]
+
 local BUGGER, Bugger = ...
 local L = Bugger.L
 

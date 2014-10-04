@@ -14,7 +14,7 @@
 ## X-CompatibleLocales: deDE, enUS, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
 ## X-Localizations: deDE, enUS, esES, esMX
 ## X-Curse-Project-ID: bugger
-## X-WoWI-ID:
+## X-WoWI-ID: 23144
 
 ## SavedVariables: BuggerDB
 ## OptionalDependencies: !BugGrabber
