@@ -1,3 +1,12 @@
+--[[--------------------------------------------------------------------
+	Bugger
+	Basic GUI front-end for !BugGrabber.
+	Copyright (c) 2014 Phanx. All rights reserved.
+	See the accompanying README and LICENSE files for more information.
+	http://www.wowinterface.com/downloads/info23144-Bugger.html
+	http://www.curse.com/addons/wow/bugger
+----------------------------------------------------------------------]]
+
 local BUGGER, Bugger = ...
 
 if not BugGrabber then
@@ -298,7 +307,7 @@ function Bugger:ShowSession(session)
 	if session ~= "all" and session ~= "previous" then
 		session = "current"
 	end
-	
+
 	if not self.frame then
 		self:SetupFrame()
 	end
@@ -482,7 +491,7 @@ menu.initialize = function(_, level)
 	info.isTitle = 1
 	info.notCheckable = 1
 	UIDropDownMenu_AddButton(info, level)
-	
+
 	info = UIDropDownMenu_CreateInfo()
 	info.text = L["Chat frame alerts"]
 	info.func = menu.chatFunc
