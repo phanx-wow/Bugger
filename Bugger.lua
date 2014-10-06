@@ -111,7 +111,7 @@ function Bugger:OnLoad()
 			end
 		end
 	end
-	LibStub("LibDBIcon-1.0"):Register(BUGGER, self.dataObject, self.db.settings.minimap)
+	LibStub("LibDBIcon-1.0"):Register(BUGGER, self.dataObject, self.db.minimap)
 end
 
 function Bugger:OnLogin()
