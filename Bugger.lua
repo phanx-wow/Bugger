@@ -8,6 +8,7 @@
 ----------------------------------------------------------------------]]
 
 local BUGGER, Bugger = ...
+local L = Bugger.L
 
 if not BugGrabber then
 	function Bugger:OnLogin()
@@ -34,8 +35,6 @@ local MIN_INTERVAL = 10
 local ICON_GRAY  = "Interface\\AddOns\\Bugger\\Icons\\Bug-Gray"
 local ICON_GREEN = "Interface\\AddOns\\Bugger\\Icons\\Bug-Green"
 local ICON_RED   = "Interface\\AddOns\\Bugger\\Icons\\Bug-Red"
-
-local L = Bugger.L
 
 local c = {
 	BLUE   = BATTLENET_FONT_COLOR_CODE,
