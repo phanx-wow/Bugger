@@ -48,4 +48,23 @@ elseif GetLocale():match("^es") then
 	L["Minimap icon"] = "Icono en minimapa"
 	L["/bugger"] = "/errores"
 
+elseif GetLocale() == "zhTW" then
+
+	L["Errors"] = "錯誤"
+	L["All Errors"] = "所有錯誤"
+	L["Current Session"] = "目前階段"
+	L["Previous Session"] = "之前階段"
+	L["An error has been captured!"] = "一個錯誤已被捕捉！"
+	L["There are no errors to display."] = "沒有錯誤可顯示。"
+	L["All saved errors have been deleted."] = "所有儲存的錯誤已被刪除。"
+	L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger沒有!BugGrabber將無法運作。請在Curse或WoWInterface尋找它。"
+	L["Click to open the error window."] = "點擊開啟錯誤視窗。"
+	L["Alt-click to clear all saved errors."] = "Alt-點擊以清除所有儲存的錯誤。"
+	L["Shift-click to reload the UI."] = "Shift-點擊重載UI。"
+	L["Right-click for options."] = "右鍵點擊開啟選項。"
+	L["Chat frame alerts"] = "聊天框架警告"
+	L["Sound alerts"] = "聲音警告"
+	L["Minimap icon"] = "小地圖圖標"
+	L["/bugger"] = "/錯誤"
+
 end
