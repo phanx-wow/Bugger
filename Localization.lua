@@ -14,8 +14,8 @@ if GetLocale() == "deDE" then
 
 	L["Errors"] = "Fehler"
 	L["All Errors"] = "Alle Felher"
-	L["Current Session"] = "Aktuelle Session"
-	L["Previous Session"] = "Vorherige Session"
+	L["Current Session"] = "Aktuelle Sitzung"
+	L["Previous Session"] = "Vorherige Sitzung"
 	L["An error has been captured!"] = "Ein Fehler wurde eingefangen!"
 	L["There are no errors to display."] = "Es gibt keine Fehler anzuzeigen."
 	L["All saved errors have been deleted."] = "Alle gespeicherten Fehler wurden gelöscht."
@@ -48,7 +48,7 @@ elseif GetLocale():match("^es") then
 	L["Minimap icon"] = "Icono en minimapa"
 	L["/bugger"] = "/errores"
 
-elseif GetLocale() == "zhTW" then
+elseif GetLocale() == "zhTW" then -- contributors: BNSSNB
 
 	L["Errors"] = "錯誤"
 	L["All Errors"] = "所有錯誤"
