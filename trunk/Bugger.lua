@@ -426,7 +426,7 @@ function Bugger:SetupFrame()
 		tab:SetScript("OnEnter", nil)
 		tab:SetScript("OnLeave", nil)
 		tab:SetFrameLevel(tabLevel)
-		PanelTemplates_TabResize(tab, 0, tabWidth) --, tabWidth, tabWidth)
+		PanelTemplates_TabResize(tab, 0, tabWidth)
 		self.tabs[i] = tab
 	end
 
@@ -441,6 +441,8 @@ function Bugger:SetupFrame()
 	self.tabs[3].session = "current"
 	self.tabs[3]:SetText(L["Current Session"])
 	self.tabs[3]:SetPoint("TOPLEFT", self.tabs[2], "TOPRIGHT")
+
+	self.frame:SetClampRectInsets(0, 0, 0, -self.tabs[3]:GetHeight())
 
 	-- TODO: add button for opening options
 	-- maybe a little gear by the close button at the top
