@@ -1,4 +1,4 @@
---[[--------------------------------------------------------------------
+0--[[--------------------------------------------------------------------
 	Bugger
 	Basic GUI front-end for !BugGrabber.
 	Copyright (c) 2014 Phanx. All rights reserved.
@@ -39,7 +39,7 @@ elseif GetLocale():match("^es") then
 	L["There are no errors to display."] = "No hay errores para mostrar."
 	L["All saved errors have been deleted."] = "Todos los errores guardados se han borrados."
 	L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger no puede funcionar sin !BugGrabber. Encuentralo en Curse o WoWInterface."
-	L["Click to open the error window."] = "Clic para mostrar el error más reciente."
+	L["Click to open the error window."] = "Clic para mostrar la ventana de errores."
 	L["Alt-click to clear all saved errors."] = "Alt-clic para borrar todos errores guardados."
 	L["Shift-click to reload the UI."] = "Mayús-clic para volver a cargar la IU."
 	L["Right-click for options."] = "Clic derecho para opciones."
@@ -47,6 +47,63 @@ elseif GetLocale():match("^es") then
 	L["Sound alerts"] = "Sonidos de alerta"
 	L["Minimap icon"] = "Icono en minimapa"
 	L["/bugger"] = "/errores"
+
+elseif GetLocale() == "frFR" then
+
+	L["Errors"] = "Erreurs"
+	L["All Errors"] = "Toutes erreures"
+	L["Current Session"] = "Session en cours"
+	L["Previous Session"] = "Session précédente"
+	L["An error has been captured!"] = "Une erreur a été capturé!"
+	L["There are no errors to display."] = "Il n'y a pas d'erreur à afficher."
+	L["All saved errors have been deleted."] = "Toutes les erreurs enregistrées ont été supprimées."
+	L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger ne peut pas fonctionner sans !BugGrabber. Trouvez-le sur Curse ou WoWInterface."
+	L["Click to open the error window."] = "Cliquez pour ouvrir la fenêtre d'erreurs."
+	L["Alt-click to clear all saved errors."] = "Alt-clic pour effacer toutes les erreurs."
+	L["Shift-click to reload the UI."] = "Maj-clic pour recharger l'IU."
+	L["Right-click for options."] = "Clic droit pour options."
+	L["Chat frame alerts"] = "Messages d'alerte dans le discussion"
+	L["Sound alerts"] = "Sons d'alerte"
+	L["Minimap icon"] = "Icône sur la minicarte"
+	L["/bugger"] = "/erreurs"
+
+elseif GetLocale() == "itIT" then
+
+	L["Errors"] = "Errori"
+	L["All Errors"] = "Tutti errori"
+	L["Current Session"] = "Sessione corrente"
+	L["Previous Session"] = "Sessione precedente"
+	L["An error has been captured!"] = "Un errore è stato catturato!"
+	L["There are no errors to display."] = "Non ci sono errori da mostrare."
+	L["All saved errors have been deleted."] = "Tutti gli errori salvati sono stati cancellari."
+	L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger non può funzionare senza !BugGrabber. Lo si può trovare su Curse o WoWInterface."
+	L["Click to open the error window."] = "Clicca per mostrare la finestra di errori."
+	L["Alt-click to clear all saved errors."] = "Alt-clic per cancellare tutti gli errori salvati."
+	L["Shift-click to reload the UI."] = "Maiusc + clic per ricaricare l'interfaccia utente."
+	L["Right-click for options."] = "Clic destro per le opzioni."
+	L["Chat frame alerts"] = "Messaggi di avviso nel chat"
+	L["Sound alerts"] = "Suoni di avviso"
+	L["Minimap icon"] = "Icona sulla minimappa"
+	L["/bugger"] = "/errori"
+
+elseif GetLocale():match("^pt") then
+
+	L["Errors"] = "Erros"
+	L["All Errors"] = "Todos erros"
+	L["Current Session"] = "Sessão atual"
+	L["Previous Session"] = "Sessão anterior"
+	L["An error has been captured!"] = "Um erro foi capturado!"
+	L["There are no errors to display."] = "Não há erros para mostrar."
+	L["All saved errors have been deleted."] = "Todos os erros guardados foram apogados."
+	L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger não pode funcionar sem !BugGrabber. Procurar no Curse ou WoWInterface."
+	L["Click to open the error window."] = "Clique para mostrar a janela de erros."
+	L["Alt-click to clear all saved errors."] = "Alt-clique para apagar todos os erros guardados."
+	L["Shift-click to reload the UI."] = "Shift-clique para recarregar a IU."
+	L["Right-click for options."] = "Clique direito para opções."
+	L["Chat frame alerts"] = "Mensagens de alerta no chat"
+	L["Sound alerts"] = "Sons de alerta"
+	L["Minimap icon"] = "Ícone no minimapa"
+	L["/bugger"] = "/erros"
 
 elseif GetLocale() == "zhTW" then -- contributors: BNSSNB
 
