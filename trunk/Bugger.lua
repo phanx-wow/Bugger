@@ -90,26 +90,6 @@ Bugger.dataObject = {
 
 function Bugger:OnLoad()
 	LibStub("LibDataBroker-1.1"):NewDataObject(BUGGER, self.dataObject)
-
-	-- Only create a minimap icon if the user doesn't have another Broker display
-	local displays = { "Barrel", "Bazooka", "ButtonBin", "ChocolateBar", "DockingStation", "HotCorners", "NinjaPanel", "StatBlockCore", "TitanPanel" }
-	if GetAddOnEnableState then
-		-- WOD
-		local character = UnitName("player")
-		for i = 1, #displays do
-			if GetAddOnEnableState(character, displays[i]) then
-				return
-			end
-		end
-	else
-		-- MOP
-		for i = 1, #displays do
-			local _, _, _, enabled = GetAddOnInfo(displays[i])
-			if enabled then
-				return
-			end
-		end
-	end
 	LibStub("LibDBIcon-1.0"):Register(BUGGER, self.dataObject, self.db.minimap)
 end
 
@@ -520,14 +500,12 @@ menu.initialize = function(_, level)
 	info.keepShownOnClick = 1
 	UIDropDownMenu_AddButton(info, level)
 ]]
-	if LibStub("LibDBIcon-1.0"):IsRegistered(BUGGER) then
-		info = UIDropDownMenu_CreateInfo()
-		info.text = L["Minimap icon"]
-		info.func = menu.iconFunc
-		info.checked = not Bugger.db.minimap.hide
-		info.keepShownOnClick = 1
-		UIDropDownMenu_AddButton(info, level)
-	end
+	info = UIDropDownMenu_CreateInfo()
+	info.text = L["Minimap icon"]
+	info.func = menu.iconFunc
+	info.checked = not Bugger.db.minimap.hide
+	info.keepShownOnClick = 1
+	UIDropDownMenu_AddButton(info, level)
 
 	info = UIDropDownMenu_CreateInfo()
 	info.text = CLOSE
