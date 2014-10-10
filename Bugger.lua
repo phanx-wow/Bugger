@@ -345,6 +345,7 @@ function Bugger:SetupFrame()
 	ScriptErrorsFrame_Update  = function() end
 
 	self.frame       = ScriptErrorsFrame
+	self.closeButton = ScriptErrorsFrameClose
 	self.scrollFrame = ScriptErrorsFrameScrollFrame
 	self.editBox     = ScriptErrorsFrameScrollFrameText
 	self.title       = self.frame.title
@@ -444,8 +445,13 @@ function Bugger:SetupFrame()
 
 	self.frame:SetClampRectInsets(0, 0, 0, -self.tabs[3]:GetHeight())
 
-	-- TODO: add button for opening options
-	-- maybe a little gear by the close button at the top
+	local optButton = CreateFrame("Button", nil, self.frame)
+	optButton:SetPoint("RIGHT", ScriptErrorsFrameClose, "LEFT")
+	optButton:SetSize(16, 16)
+	optButton:SetNormalTexture("Interface\\Buttons\\UI-OptionsButton")
+	optButton:SetScript("OnClick", function(self, button)
+		ToggleDropDownMenu(nil, nil, Bugger.menu, self, 0, 0, nil, nil, 10)
+	end)
 end
 
 ------------------------------------------------------------------------
@@ -468,16 +474,23 @@ local menu = CreateFrame("Frame", "BuggerMenu", UIParent, "UIDropDownMenuTemplat
 menu.displayMode = "MENU"
 
 menu.chatFunc = function(self, arg1, arg2, checked)
+	--print("Chat alerts:", checked and YES or NO)
 	Bugger.db.chat = checked
 end
 
 menu.soundFunc = function(self, arg1, arg2, checked)
+	--print("Sound alerts:", checked and YES or NO)
 	Bugger.db.sound = checked
 end
 
 menu.iconFunc = function(self, arg1, arg2, checked)
+	--print("Minimap icon:", checked and YES or NO)
 	Bugger.db.minimap.hide = not checked
-	LibStub("LibDBIcon-1.0"):Refresh(BUGGER, Bugger.db.minimap)
+	if checked then
+		LibStub("LibDBIcon-1.0"):Show(BUGGER)
+	else
+		LibStub("LibDBIcon-1.0"):Hide(BUGGER)
+	end
 end
 
 menu.closeFunc = function()
