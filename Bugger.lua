@@ -325,7 +325,6 @@ function Bugger:SetupFrame()
 	ScriptErrorsFrame_Update  = function() end
 
 	self.frame       = ScriptErrorsFrame
-	self.closeButton = ScriptErrorsFrameClose
 	self.scrollFrame = ScriptErrorsFrameScrollFrame
 	self.editBox     = ScriptErrorsFrameScrollFrameText
 	self.title       = self.frame.title
@@ -425,11 +424,20 @@ function Bugger:SetupFrame()
 
 	self.frame:SetClampRectInsets(0, 0, 0, -self.tabs[3]:GetHeight())
 
-	local optButton = CreateFrame("Button", nil, self.frame)
-	optButton:SetPoint("RIGHT", ScriptErrorsFrameClose, "LEFT")
+	local optButton = CreateFrame("Button", nil, ScriptErrorsFrameTitleButton)
+	optButton:SetPoint("TOPRIGHT", ScriptErrorsFrameClose, "TOPLEFT", -2, -8)
 	optButton:SetSize(16, 16)
 	optButton:SetNormalTexture("Interface\\Buttons\\UI-OptionsButton")
+	optButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square")
+	
+	optButton:RegisterForClicks("AnyUp")
+	optButton:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT")
+		GameTooltip:SetText(L["Right-click for options."])
+	end)
+	optButton:SetScript("OnLeave", GameTooltip_Hide)
 	optButton:SetScript("OnClick", function(self, button)
+		if button ~= "RightButton" then return end
 		ToggleDropDownMenu(nil, nil, Bugger.menu, self, 0, 0, nil, nil, 10)
 	end)
 end
