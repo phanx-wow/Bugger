@@ -321,6 +321,7 @@ function Bugger:SetupFrame()
 		LoadAddOn("Blizzard_DebugTools")
 	end
 
+	tinsert(UISpecialFrames, "ScriptErrorsFrame")
 	ScriptErrorsFrame_OnError = function() end
 	ScriptErrorsFrame_Update  = function() end
 
