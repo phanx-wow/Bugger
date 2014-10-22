@@ -3,7 +3,7 @@
 
 ## Title: Bugger
 ## Notes: Shows the errors captured by !BugGrabber.
-## Notes-deDE: Zeigt den von !BugGrabber eingefangenen Fehler.
+## Notes-deDE: Zeigt die von !BugGrabber eingefangenen Fehler.
 ## Notes-esES: Muestra los errors capturados por !BugGrabber.
 ## Notes-esMX: Muestra los errors capturados por !BugGrabber.
 
