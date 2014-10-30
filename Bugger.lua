@@ -74,7 +74,7 @@ Bugger.dataObject = {
 			local errors = BugGrabber:GetDB()
 			for i = 1, min(total, 3) do
 				local err = errors[#errors + 1 - i]
-				tt:AddLine(format("%s%d.|r %s", c.GRAY, total + 1 - i, Bugger:FormatError(err, true)), 1, 1, 1)
+				tt:AddLine(format("%s%d.|r %s", c.GRAY, total + 1 - i, Bugger:FormatError(err, "short")), 1, 1, 1)
 			end
 			tt:AddLine(" ")
 		end
@@ -218,17 +218,19 @@ do
 	local FULL_TEMPLATE = "%d" .. c.GRAY .. "x|r %s%s"
 	local SHORT_TEMPLATE = "%s " .. c.GRAY .. "(x%d)|r"
 
-	function Bugger:FormatError(err, short)
-		if short then
+	function Bugger:FormatError(err, style)
+		if style == "short" then
 			return format(SHORT_TEMPLATE, self:FormatStack(err.message), err.counter or 1)
+		elseif style == "extended" then
+			return format(FULL_TEMPLATE, err.counter or 1, self:FormatStack(err.message, err.stack), self:FormatLocals(err.locals))
 		end
-		return format(FULL_TEMPLATE, err.counter or 1, self:FormatStack(err.message, err.stack), self:FormatLocals(err.locals))
+		return format(FULL_TEMPLATE, err.counter or 1, self:FormatStack(err.message, err.stack), "")
 	end
 end
 
 ------------------------------------------------------------------------
 
-function Bugger:ShowError(index)
+function Bugger:ShowError(index, showLocals)
 	if not self.frame then
 		self:SetupFrame()
 	end
@@ -269,8 +271,8 @@ function Bugger:ShowError(index)
 
 	self.indexLabel:SetFormattedText("%d / %d", index + 1 - first, total)
 
-	self.editBox:SetText(self:FormatError(err))
-	self.editBox:SetCursorPosition(strlen(err.message))
+	self.editBox:SetText(self:FormatError(err, showLocals and "extended" or nil))
+	self.editBox:SetCursorPosition(1)
 	self.editBox:ClearFocus()
 
 	self.scrollFrame:SetVerticalScroll(0)
