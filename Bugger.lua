@@ -21,8 +21,7 @@ _G[BUGGER] = Bugger
 
 ------------------------------------------------------------------------
 
-Bugger.db = "BuggerDB"
-Bugger.dbDefaults = {
+local defaults = {
 	chat  = true,  -- show a message in the chat frame when an error is captured
 	sound = false, -- play a sound when an error is captured
 	minimap = {},
@@ -94,6 +93,8 @@ function Bugger:OnLoad()
 end
 
 function Bugger:OnLogin()
+	self:InitializeDB("BuggerDB", defaults)
+
 	BugGrabber.RegisterCallback(self, "BugGrabber_BugGrabbed")
 	if self:GetNumErrors() > 0 then
 		return self:BugGrabber_BugGrabbed()
