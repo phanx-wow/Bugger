@@ -88,13 +88,12 @@ Bugger.dataObject = {
 ------------------------------------------------------------------------
 
 function Bugger:OnLoad()
+	self.db = self:InitializeDB("BuggerDB", defaults)
 	LibStub("LibDataBroker-1.1"):NewDataObject(BUGGER, self.dataObject)
 	LibStub("LibDBIcon-1.0"):Register(BUGGER, self.dataObject, self.db.minimap)
 end
 
 function Bugger:OnLogin()
-	self:InitializeDB("BuggerDB", defaults)
-
 	BugGrabber.RegisterCallback(self, "BugGrabber_BugGrabbed")
 	if self:GetNumErrors() > 0 then
 		return self:BugGrabber_BugGrabbed()
