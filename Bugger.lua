@@ -456,7 +456,6 @@ function Bugger:SetupFrame()
 	optButton:SetSize(16, 16)
 	optButton:SetNormalTexture("Interface\\Buttons\\UI-OptionsButton")
 	optButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square")
-	
 	optButton:RegisterForClicks("AnyUp")
 	optButton:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT")
@@ -466,6 +465,23 @@ function Bugger:SetupFrame()
 	optButton:SetScript("OnClick", function(self, button)
 		if button ~= "RightButton" then return end
 		ToggleDropDownMenu(nil, nil, Bugger.menu, self, 0, 0, nil, nil, 10)
+	end)
+
+	local reloadButton = CreateFrame("Button", nil, ScriptErrorsFrameTitleButton)
+	reloadButton:SetPoint("RIGHT", optButton, "LEFT", -2, -1)
+	reloadButton:SetSize(18, 18)
+	reloadButton:SetNormalTexture("Interface\\Buttons\\UI-RefreshButton")
+	reloadButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square")
+	reloadButton:RegisterForClicks("AnyUp")
+	reloadButton:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT")
+		GameTooltip:SetText(L["Shift-click to reload the UI."])
+	end)
+	reloadButton:SetScript("OnLeave", GameTooltip_Hide)
+	reloadButton:SetScript("OnClick", function(self, button)
+		if IsShiftKeyDown() then
+			ReloadUI()
+		end
 	end)
 end
 
