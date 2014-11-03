@@ -248,6 +248,7 @@ function Bugger:ShowError(index, showLocals)
 		self.scrollFrame:SetVerticalScroll(0)
 		self.title:SetText(LUA_ERROR)
 		self.indexLabel:SetText("")
+		self.showLocals:Disable()
 		self.previous:Disable()
 		self.next:Disable()
 		self.clear:SetEnabled(#errors > 0)
@@ -269,7 +270,14 @@ function Bugger:ShowError(index, showLocals)
 		self.title:SetText(err.time)
 	end
 
-	self.indexLabel:SetFormattedText("%d / %d", index + 1 - first, total)
+	if err.locals == "" or not err.locals then
+		showLocals = false
+		self.showLocals:Disable()
+		self.showLocals:GetHighlightTexture():SetDrawLayer("HIGHLIGHT")
+	else
+		self.showLocals:Enable()
+		self.showLocals:GetHighlightTexture():SetDrawLayer(showLocals and "OVERLAY" or "HIGHLIGHT")
+	end
 
 	self.editBox:SetText(self:FormatError(err, showLocals and "extended" or nil))
 	self.editBox:SetCursorPosition(1)
@@ -277,9 +285,11 @@ function Bugger:ShowError(index, showLocals)
 
 	self.scrollFrame:SetVerticalScroll(0)
 
+	self.indexLabel:SetFormattedText("%d / %d", index + 1 - first, total)
+
+	self.clear:Enable()
 	self.previous:SetEnabled(index > first)
 	self.next:SetEnabled(index < last)
-	self.clear:Enable()
 end
 
 ------------------------------------------------------------------------
@@ -363,15 +373,29 @@ function Bugger:SetupFrame()
 		self:ShowError()
 	end)
 
+	local pnwidth = max(self.previous:GetFontString():GetStringWidth(), self.next:GetFontString():GetStringWidth()) + 20
+
 	self.next:ClearAllPoints()
 	self.next:SetPoint("BOTTOMRIGHT", -10, 12)
+	self.next:SetWidth(pnwidth)
 
 	self.previous:ClearAllPoints()
 	self.previous:SetPoint("RIGHT", self.next, "LEFT", -4, 0)
+	self.previous:SetWidth(pnwidth)
+
+	self.showLocals = CreateFrame("Button", nil, self.frame, "UIPanelButtonTemplate")
+	self.showLocals:SetPoint("RIGHT", self.previous, "LEFT", -4, 0)
+	self.showLocals:SetText(L["Locals"])
+	self.showLocals:SetHeight(self.previous:GetHeight())
+	self.showLocals:SetWidth(self.showLocals:GetFontString():GetStringWidth() + 20)
+	self.showLocals:SetScript("OnClick", function(this)
+		local showLocals = this:GetHighlightTexture():GetDrawLayer() == "HIGHLIGHT"
+		Bugger:ShowError(Bugger.error, showLocals)
+	end)
 
 	self.indexLabel:ClearAllPoints()
 	self.indexLabel:SetPoint("LEFT", self.clear, "RIGHT", 4, 0)
-	self.indexLabel:SetPoint("RIGHT", self.previous, "LEFT", -4, 0)
+	self.indexLabel:SetPoint("RIGHT", self.showLocals, "LEFT", -4, 0)
 	self.indexLabel:SetJustifyH("CENTER")
 
 	self.error = 0
