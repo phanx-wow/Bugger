@@ -4,15 +4,18 @@
 ## Title: Bugger
 ## Notes: Shows the errors captured by !BugGrabber.
 ## Notes-deDE: Zeigt die von !BugGrabber eingefangenen Fehler.
-## Notes-esES: Muestra los errors capturados por !BugGrabber.
-## Notes-esMX: Muestra los errors capturados por !BugGrabber.
+## Notes-esES: Muestra los errores capturados por !BugGrabber.
+## Notes-esMX: Muestra los errores capturados por !BugGrabber.
+## Notes-frFR: Affiche les erreurs capturés par !BugGrabber.
+## Notes-itIT: Mostra gli errori catturati da !BugGrabber.
+## Notes-ptBR: Mostra os erros capturados por !BugGrabber.
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
 ## X-Copyright: Copyright (c) 2014 Phanx. All rights reserved.
 ## X-License: See the accompanying LICENSE file for information.
 ## X-CompatibleLocales: deDE, enUS, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
-## X-Localizations: deDE, enUS, esES, esMX
+## X-Localizations: deDE, enUS, esES, esMX, frFR, itIT, ptBR, zhTW
 ## X-Curse-Project-ID: bugger
 ## X-WoWI-ID: 23144
 
