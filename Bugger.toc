@@ -1,5 +1,5 @@
 ## Interface: 60000
-## Version: Beta wowi:revision
+## Version: 6.0.3.wowi:revision
 
 ## Title: Bugger
 ## Notes: Shows the errors captured by !BugGrabber.
@@ -12,8 +12,8 @@
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-Copyright: Copyright (c) 2014 Phanx. All rights reserved.
-## X-License: See the accompanying LICENSE file for information.
+## X-Copyright: Copyright (c) 2014 Phanx.
+## X-License: All rights reserved.
 ## X-CompatibleLocales: deDE, enUS, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
 ## X-Localizations: deDE, enUS, esES, esMX, frFR, itIT, ptBR, zhTW
 ## X-Curse-Project-ID: bugger

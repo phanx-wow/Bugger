@@ -1,10 +1,16 @@
 --[[--------------------------------------------------------------------
 	Bugger
-	Basic GUI front-end for !BugGrabber.
-	Copyright (c) 2014 Phanx. All rights reserved.
-	See the accompanying README and LICENSE files for more information.
+	Shows the errors captured by !BugGrabber.
 	http://www.wowinterface.com/downloads/info23144-Bugger.html
 	http://www.curse.com/addons/wow/bugger
+
+	Copyright (c) 2014 Phanx <addons@phanx.net>. All rights reserved.
+	Please DO NOT upload this addon to other websites, or post modified
+	versions of it. However, you are welcome to include a copy of it
+	WITHOUT CHANGES in compilations posted on Curse and/or WoWInterface.
+	You are also welcome to use any/all of its code in your own addon, as
+	long as you do not use my name or the name of this addon ANYWHERE in
+	your addon, including its name, outside of an optional attribution.
 ----------------------------------------------------------------------]]
 
 local BUGGER, Bugger = ...
