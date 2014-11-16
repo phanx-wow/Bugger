@@ -24,6 +24,7 @@ _G[BUGGER] = Bugger
 local defaults = {
 	chat  = true,  -- show a message in the chat frame when an error is captured
 	sound = false, -- play a sound when an error is captured
+	minimapAuto = true,
 	minimap = {
 		hide = true,
 	},
@@ -33,7 +34,6 @@ local defaults = {
 
 local MIN_INTERVAL = 10
 
-local ICON_GRAY  = "Interface\\AddOns\\Bugger\\Icons\\Bug-Gray"
 local ICON_GREEN = "Interface\\AddOns\\Bugger\\Icons\\Bug-Green"
 local ICON_RED   = "Interface\\AddOns\\Bugger\\Icons\\Bug-Red"
 
@@ -99,6 +99,8 @@ function Bugger:OnLogin()
 	BugGrabber.RegisterCallback(self, "BugGrabber_BugGrabbed")
 	if self:GetNumErrors() > 0 then
 		return self:BugGrabber_BugGrabbed()
+	elseif self.db.minimapAuto then
+		LibStub("LibDBIcon-1.0"):Hide(BUGGER)
 	end
 end
 
@@ -109,6 +111,10 @@ hooksecurefunc(BugGrabber, "Reset", function()
 
 	Bugger.dataObject.icon = ICON_GREEN
 	Bugger.dataObject.text = 0
+
+	if self.db.minimapAuto then
+		LibStub("LibDBIcon-1.0"):Hide(BUGGER)
+	end
 end)
 
 ------------------------------------------------------------------------
@@ -154,6 +160,10 @@ end
 function Bugger:BugGrabber_BugGrabbed(callback, err)
 	self.dataObject.text = self:GetNumErrors()
 	self.dataObject.icon = ICON_RED
+
+	if self.db.minimapAuto then
+		LibStub("LibDBIcon-1.0"):Show(BUGGER)
+	end
 
 	if (self.lastError or 0) + MIN_INTERVAL < GetTime() then
 		if self.db.chat then
@@ -526,6 +536,16 @@ menu.iconFunc = function(self, arg1, arg2, checked)
 	end
 end
 
+menu.autoFunc = function(self, arg1, arg2, checked)
+	--print("Auto icon:", checked and YES or NO)
+	Bugger.db.minimapAuto = checked
+	if checked and Bugger:GetNumErrors() > 0 then
+		LibStub("LibDBIcon-1.0"):Show(BUGGER)
+	elseif checked then
+		LibStub("LibDBIcon-1.0"):Hide(BUGGER)
+	end
+end
+
 menu.closeFunc = function()
 	CloseDropDownMenus()
 end
@@ -557,6 +577,14 @@ menu.initialize = function(_, level)
 	info.text = L["Minimap icon"]
 	info.func = menu.iconFunc
 	info.checked = not Bugger.db.minimap.hide
+	info.disabled = Bugger.db.minimapAuto
+	info.keepShownOnClick = 1
+	UIDropDownMenu_AddButton(info, level
+
+	info = UIDropDownMenu_CreateInfo()
+	info.text = L["Automatic"]
+	info.func = menu.autoFunc
+	info.checked = Bugger.db.minimapAuto
 	info.keepShownOnClick = 1
 	UIDropDownMenu_AddButton(info, level)
 
