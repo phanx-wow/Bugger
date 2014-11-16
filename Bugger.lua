@@ -24,7 +24,9 @@ _G[BUGGER] = Bugger
 local defaults = {
 	chat  = true,  -- show a message in the chat frame when an error is captured
 	sound = false, -- play a sound when an error is captured
-	minimap = {},
+	minimap = {
+		hide = true,
+	},
 }
 
 ------------------------------------------------------------------------
