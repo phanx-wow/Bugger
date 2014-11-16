@@ -167,13 +167,24 @@ function Bugger:BugGrabber_BugGrabbed(callback, err)
 
 	if (self.lastError or 0) + MIN_INTERVAL < GetTime() then
 		if self.db.chat then
-			self:Print(L["An error has been captured!"])
+			self:Print("|Hbugger:0|h[" .. L["An error has been captured!"] .. "]|h")
 		end
 		if self.db.sound then
 			PlaySoundFile(self.db.sound, "Master")
 		end
 	end
 	self.lastError = GetTime()
+end
+
+------------------------------------------------------------------------
+
+local orig_OnHyperlinkShow = ChatFrame_OnHyperlinkShow
+
+function ChatFrame_OnHyperlinkShow(frame, link, ...)
+	if strsub(link, 1, 6) == "bugger" then
+		return Bugger:ToggleFrame()
+	end
+	return orig_OnHyperlinkShow(frame, link, ...)
 end
 
 ------------------------------------------------------------------------
