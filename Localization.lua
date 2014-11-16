@@ -13,24 +13,24 @@ local L = Bugger.L
 -- Please use the CurseForge project page to add or update translations!
 -- http://wow.curseforge.com/addons/bugger/localization/
 
-if GetLocale() == "deDE" then
+if GetLocale() == "deDE" then -- contributors: Tumbleweed_DSA
 
 	L["/bugger"] = "/fehler"
 	L["All Errors"] = "Alle Fehler"
-	L["All saved errors have been deleted."] = "Alle gespeicherten Fehler wurden gelöscht."
-	L["Alt-click to clear all saved errors."] = "Alt-klick, um alle gespeicherten Fehler zu löschen."
-	L["An error has been captured!"] = "Ein Fehler wurde eingefangen!"
-	L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger kann ohne !BugGrabber nicht funktionieren. Zu finden auf Curse oder WoWInterface."
+	L["All saved errors have been deleted."] = "Alle aufgezeichneten Fehler wurden gelöscht."
+	L["Alt-click to clear all saved errors."] = "Alt-Klick, um alle aufgezeichneten Fehler zu löschen."
+	L["An error has been captured!"] = "Ein Fehler wurde aufgezeichnet!"
+	L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger kann ohne !BugGrabber nicht funktionieren. !BugGrabber ist bei Curse oder WoWInterface zu finden."
 	L["Chat frame alerts"] = "Warnmeldungen im Chatfenster"
 	L["Click to open the error window."] = "Klick, um das Fehler-Fenster anzuzeigen."
-	L["Click to show or hide the local variables captured with this error."] = "Klick, um die lokale Variablen umzuschalten, die mit diesem Fehler eingefangen wurden."
+	L["Click to show or hide the local variables captured with this error."] = "Klick, um die lokalen Variablen anzuzeigen, oder zu verbergen, die mit diesem Fehler aufgezeichnet wurden."
 	L["Current Session"] = "Aktuelle Sitzung"
 	L["Errors"] = "Fehler"
 	L["Locals"] = "Lokale"
 	L["Minimap icon"] = "Minikartensymbol anzeigen"
 	L["Previous Session"] = "Vorherige Sitzung"
 	L["Right-click for options."] = "Rechtsklick für Optionen."
-	L["Shift-click to reload the UI."] = "Shift-klick, um die UI neu zu laden."
+	L["Shift-click to reload the UI."] = "Shift-Klick, um die UI neu zu laden."
 	L["Sound alerts"] = "Warnsounds abspielen"
 	L["There are no errors to display."] = "Es gibt keine Fehler anzuzeigen."
 
@@ -138,12 +138,12 @@ elseif GetLocale() == "zhTW" then -- contributors: BNSSNB
 	L["Alt-click to clear all saved errors."] = "Alt-點擊以清除所有儲存的錯誤。"
 	L["An error has been captured!"] = "一個錯誤已被捕捉！"
 	L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger沒有!BugGrabber將無法運作。請在Curse或WoWInterface尋找它。"
---	L["Click to show or hide the local variables captured with this error."] = ""
+	L["Click to show or hide the local variables captured with this error."] = "按一下以顯示或隱藏此錯誤捕捉的本地變數。"
 	L["Chat frame alerts"] = "聊天框架警告"
 	L["Click to open the error window."] = "點擊開啟錯誤視窗。"
 	L["Current Session"] = "目前階段"
 	L["Errors"] = "錯誤"
---	L["Locals"] = ""
+	L["Locals"] = "本地"
 	L["Minimap icon"] = "小地圖圖標"
 	L["Previous Session"] = "之前階段"
 	L["Right-click for options."] = "右鍵點擊開啟選項。"
