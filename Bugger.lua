@@ -574,14 +574,12 @@ menu.initialize = function(_, level)
 	info.text = L["Chat frame alerts"]
 	info.func = menu.chatFunc
 	info.checked = Bugger.db.chat
-	info.keepShownOnClick = 1
 	UIDropDownMenu_AddButton(info, level)
 --[[ TODO
 	info = UIDropDownMenu_CreateInfo()
 	info.text = L["Sound alerts"]
 	info.func = menu.soundFunc
 	info.checked = Bugger.db.sound
-	info.keepShownOnClick = 1
 	UIDropDownMenu_AddButton(info, level)
 ]]
 	info = UIDropDownMenu_CreateInfo()
@@ -589,14 +587,12 @@ menu.initialize = function(_, level)
 	info.func = menu.iconFunc
 	info.checked = not Bugger.db.minimap.hide
 	info.disabled = Bugger.db.minimapAuto
-	info.keepShownOnClick = 1
-	UIDropDownMenu_AddButton(info, level
+	UIDropDownMenu_AddButton(info, level)
 
 	info = UIDropDownMenu_CreateInfo()
 	info.text = L["Automatic"]
 	info.func = menu.autoFunc
 	info.checked = Bugger.db.minimapAuto
-	info.keepShownOnClick = 1
 	UIDropDownMenu_AddButton(info, level)
 
 	info = UIDropDownMenu_CreateInfo()
