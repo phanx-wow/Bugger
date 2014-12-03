@@ -112,7 +112,7 @@ hooksecurefunc(BugGrabber, "Reset", function()
 	Bugger.dataObject.icon = ICON_GREEN
 	Bugger.dataObject.text = 0
 
-	if self.db.minimapAuto then
+	if Bugger.db.minimapAuto then
 		LibStub("LibDBIcon-1.0"):Hide(BUGGER)
 	end
 end)
