@@ -1,3 +1,7 @@
+### Version 6.0.3.5
+
+* Added an option to automatically show or hide the minimap button
+
 ### Version 6.0.3.28-beta
 
 * Local variables are no longer shown by default, as they are almost always irrelevant. Press the "Locals" button to show them for the current error.
