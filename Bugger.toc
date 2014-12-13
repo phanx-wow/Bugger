@@ -1,9 +1,9 @@
 ## Interface: 60000
-## Version: 6.0.3.28-beta
+## Version: @project-version@
 
 ## Title: Bugger
 ## Notes: Shows the errors captured by !BugGrabber.
-## Notes-deDE: Zeigt die von !BugGrabber aufgezeichneten Fehler.
+## Notes-deDE: Zeigt die von !BugGrabber eingefangenen Fehler.
 ## Notes-esES: Mostrar los errores capturados por !BugGrabber.
 ## Notes-esMX: Mostrar los errores capturados por !BugGrabber.
 ## Notes-frFR: Afficher les erreurs capturés par !BugGrabber.
