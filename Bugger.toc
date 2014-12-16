@@ -9,6 +9,7 @@
 ## Notes-frFR: Afficher les erreurs capturés par !BugGrabber.
 ## Notes-itIT: Mostrare gli errori catturati da !BugGrabber.
 ## Notes-ptBR: Mostrar os erros capturados por !BugGrabber.
+## Notes-zhCN: 显示 !BugGrabber捕获的出错。
 ## Notes-zhTW: 顯示經由!BugGrabber捕捉的錯誤。
 
 ## Author: Phanx

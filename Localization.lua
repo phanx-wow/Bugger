@@ -131,9 +131,27 @@ elseif GetLocale() == "koKR" then
 
 	-- MISSING
 
-elseif GetLocale() == "zhCN" then
+elseif GetLocale() == "zhCN" then -- contributors: q09q09
 
-	-- MISSING
+	L["/bugger"] = "/出错"
+	L["All Errors"] = "所有出错"
+	L["All saved errors have been deleted."] = "所有保存出错已经删除。"
+	L["Alt-click to clear all saved errors."] = "按住Alt点击清除所有保存的出错。"
+	L["An error has been captured!"] = "已捕做到一个出错！"
+	L["Automatic"] = "自动"
+	L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger基于!BugGrabber运作。请到Curse或WoWInterface搜寻它。"
+	L["Chat frame alerts"] = "聊天框警报"
+	L["Click to open the error window."] = "点击打开出错窗口。"
+	L["Click to show or hide the local variables captured with this error."] = "点击显示或隐藏与此出错捕获的局部变量。"
+	L["Current Session"] = "当前会话"
+	L["Errors"] = "出错"
+	L["Locals"] = "本地"
+	L["Minimap icon"] = "迷你地图图标"
+	L["Previous Session"] = "之前会话"
+	L["Right-click for options."] = "右键单击选项。"
+	L["Shift-click to reload the UI."] = "按住Shift键单击重新加载UI。"
+	L["Sound alerts"] = "声音警报"
+	L["There are no errors to display."] = "没有出错显示。"
 
 elseif GetLocale() == "zhTW" then -- contributors: BNSSNB
 
