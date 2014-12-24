@@ -1,3 +1,7 @@
+### Version 6.0.3.7
+
+* Added Traditional Chinese translations from q09q09
+
 ### Version 6.0.3.6
 
 * Added an option to automatically show or hide the minimap button
