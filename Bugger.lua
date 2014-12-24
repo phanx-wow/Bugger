@@ -100,7 +100,6 @@ function Bugger:OnLogin()
 	if self:GetNumErrors() > 0 then
 		return self:BugGrabber_BugGrabbed()
 	elseif self.db.minimapAuto then
-		print("OnLogin, minimapAuto, Hide")
 		LibStub("LibDBIcon-1.0"):Hide(BUGGER)
 	end
 end
@@ -114,7 +113,6 @@ hooksecurefunc(BugGrabber, "Reset", function()
 	Bugger.dataObject.text = 0
 
 	if Bugger.db.minimapAuto then
-		print("Reset, minimapAuto, Hide")
 		LibStub("LibDBIcon-1.0"):Hide(BUGGER)
 	end
 end)
@@ -164,7 +162,6 @@ function Bugger:BugGrabber_BugGrabbed(callback, err)
 	self.dataObject.icon = ICON_RED
 
 	if self.db.minimapAuto then
-		print("BugGrabbed, minimapAuto, show")
 		LibStub("LibDBIcon-1.0"):Show(BUGGER)
 	end
 
