@@ -1,4 +1,4 @@
-### Version 6.0.3.5
+### Version 6.0.3.6
 
 * Added an option to automatically show or hide the minimap button
 * Added the ability to click the chat notification message to open the window
