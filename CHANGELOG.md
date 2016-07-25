@@ -1,3 +1,8 @@
+### Version 7.0.3.0
+
+* Updated for WoW 7.0
+* Bugger now creates its own frame, rather than reusing the Blizzard errors frame.
+
 ### Version 6.1.0.8
 
 * Updated for WoW 6.1
