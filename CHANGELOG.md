@@ -1,7 +1,11 @@
+### Version 7.0.3.1
+
+* Fixed moving the frame by dragging its title bar
+
 ### Version 7.0.3.0
 
 * Updated for WoW 7.0
-* Bugger now creates its own frame, rather than reusing the Blizzard errors frame.
+* Bugger now creates its own frame, rather than reusing the Blizzard errors frame
 
 ### Version 6.1.0.8
 

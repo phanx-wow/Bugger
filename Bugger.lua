@@ -364,21 +364,6 @@ function Bugger:SetupFrame()
 
 	tinsert(UISpecialFrames, "BuggerFrame")
 
-	local titleButton = CreateFrame("Frame", nil, f)
-	titleButton:SetPoint("TOPLEFT", "$parentTitleBG")
-	titleButton:SetPoint("BOTTOMRIGHT", "$parentTitleBG")
-	titleButton:RegisterForDrag("LeftButton")
-	f.titleButton = titleButton
-
-	titleButton:SetScript("OnDragStart", function(self)
-		f.moving = true
-		f:StartMoving()
-	end)
-	titleButton:SetScript("OnDragStop", function(self)
-		f.moving = nil
-		f:StopMovingOrSizing()
-	end)
-
 	local scrollFrame = CreateFrame("ScrollFrame", "$parentScrollFrame", f, "UIPanelScrollFrameTemplate")
 	scrollFrame:SetSize(489, 240)
 	scrollFrame:SetPoint("TOPLEFT", 16, -32)
@@ -509,7 +494,7 @@ function Bugger:SetupFrame()
 
 	f:SetClampRectInsets(0, 0, 0, -self.tabs[3]:GetHeight())
 
-	local options = CreateFrame("Button", nil, f.titleButton)
+	local options = CreateFrame("Button", nil, f)
 	options:SetPoint("TOPRIGHT", "$parentClose", "TOPLEFT", -2, -8)
 	options:SetSize(16, 16)
 	options:SetNormalTexture("Interface\\Buttons\\UI-OptionsButton")
@@ -525,6 +510,23 @@ function Bugger:SetupFrame()
 		ToggleDropDownMenu(nil, nil, Bugger.menu, self, 0, 0, nil, nil, 10)
 	end)
 	f.options = options
+
+	local titleButton = CreateFrame("Frame", nil, f)
+	titleButton:SetHeight(17)
+	titleButton:SetPoint("TOPLEFT")
+	titleButton:SetPoint("RIGHT", options, "LEFT", -2, 0)
+	titleButton:EnableMouse(true)
+	titleButton:RegisterForDrag("LeftButton")
+	f.titleButton = titleButton
+
+	titleButton:SetScript("OnDragStart", function(self)
+		f.moving = true
+		f:StartMoving()
+	end)
+	titleButton:SetScript("OnDragStop", function(self)
+		f.moving = nil
+		f:StopMovingOrSizing()
+	end)
 
 	self.frame       = f
 	self.scrollFrame = f.scrollFrame
