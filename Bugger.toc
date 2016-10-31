@@ -16,6 +16,7 @@
 ## X-Email: addons@phanx.net
 ## X-Copyright: Copyright (c) 2015-2016 Phanx. All rights reserved.
 ## X-Website: https://github.com/Phanx/Bugger
+## X-WoWI-ID: 23144
 
 ## SavedVariables: BuggerDB
 ## OptionalDependencies: !BugGrabber
