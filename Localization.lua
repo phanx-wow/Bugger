@@ -35,7 +35,7 @@ L["/bugger"] = "/fehler"
 L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger kann ohne !BugGrabber nicht funktionieren. !BugGrabber ist bei Curse oder WoWInterface zu finden."
 L["Chat frame alerts"] = "Warnmeldungen im Chatfenster"
 L["Click to open the error window."] = "Klick, um das Fehler-Fenster anzuzeigen."
-L["Click to show or hide the local variables captured with this error."] = "Klicken, um die lokalen Variablen anzuzeigen, oder zu verbergen, die mit diesem Fehler aufgezeichnet wurden."
+L["Click to show or hide the local variables captured with this error."] = "Klicken, um die lokalen Variablen, die mit diesem Fehler aufgezeichnet wurden, anzuzeigen oder zu verbergen."
 L["Current Session"] = "Aktuelle Session"
 L["Errors"] = "Fehler"
 L["Locals"] = "Lokale"
@@ -199,6 +199,25 @@ return end
 ------------------------------------------------------------------------
 
 if CURRENT_LOCALE == "ruRU" then
+
+L["All Errors"] = "Все ошибки"
+L["All saved errors have been deleted."] = "Все сохраненные ошибки удалены."
+L["Alt-click to clear all saved errors."] = "<Alt+ЛКМ> для очистки сохраненных ошибок."
+L["An error has been captured!"] = "Ошибка поймана!"
+L["Automatic"] = "Автоматически"
+L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger не работает без !BugGrabber. Найдите данный плагин на Curse или WoWInterface."
+L["Chat frame alerts"] = "Оповещения в чате"
+L["Click to open the error window."] = "<ЛКМ> для отображения окна ошибки."
+L["Click to show or hide the local variables captured with this error."] = "<ЛКМ> для отображения/скрытия локальных переменных пойманной ошибки.  "
+L["Current Session"] = "Текущая сессия"
+L["Errors"] = "Ошибки"
+L["Minimap icon"] = "Значок у миникарты"
+L["Previous Session"] = "Предыдущая сессия"
+L["Right-click for options."] = "<ПКМ> открывает настройки."
+L["Shift-click to reload the UI."] = "<Shift+ЛКМ> для перезагрузки интерфейса."
+L["Shows the errors captured by !BugGrabber."] = "Отображает ошибки отловленные !BugGrabber'ом. "
+L["Sound alerts"] = "Звуковые оповещения"
+L["There are no errors to display."] = "Нет ошибок для отображения."
 
 return end
 

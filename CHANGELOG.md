@@ -1,3 +1,8 @@
+### Version 7.1.0.0
+
+* Updated for WoW 7.1
+* Added Russian translations from BenzolChildhood
+
 ### Version 7.0.3.1
 
 * Fixed moving the frame by dragging its title bar
