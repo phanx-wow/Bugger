@@ -1,4 +1,4 @@
-## Interface: 70100
+## Interface: 70300
 ## Version: @project-version@
 
 ## Title: Bugger
@@ -14,8 +14,9 @@
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-Copyright: Copyright (c) 2015-2016 Phanx. All rights reserved.
-## X-Website: https://github.com/Phanx/Bugger
+## X-License: All rights reserved
+## X-Website: https://github.com/phanx-wow/Bugger
+## X-Curse-Project-ID: 85473
 ## X-WoWI-ID: 23144
 
 ## SavedVariables: BuggerDB

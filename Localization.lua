@@ -1,9 +1,8 @@
 --[[--------------------------------------------------------------------
 	Bugger
 	Shows the errors captured by !BugGrabber.
-	Copyright (c) 2015-2016 Phanx <addons@phanx.net>. All rights reserved.
-	http://www.wowinterface.com/downloads/info23144-Bugger.html
-	https://mods.curse.com/addons/wow/bugger
+	Copyright 2015-2018 Phanx <addons@phanx.net>
+	All rights reserved. See LICENSE.txt for details.
 	https://github.com/Phanx/Bugger
 ----------------------------------------------------------------------]]
 

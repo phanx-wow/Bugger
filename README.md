@@ -10,5 +10,5 @@ Bugger
 **ZH-CN** — 显示 !BugGrabber捕获的出错。  
 **ZH-TW** — 顯示經由!BugGrabber捕捉的錯誤。
 
-* [Download from Curse](https://mods.curse.com/addons/wow/bugger)
-* [Download from WoWInterface](http://www.wowinterface.com/downloads/info23144-Bugger.html)
+* [Download from Curse](https://www.curseforge.com/wow/addons/bugger)
+* [Download from WoWInterface](https://www.wowinterface.com/downloads/info23144-Bugger.html)
