@@ -528,6 +528,10 @@ function Bugger:SetupFrame()
 		f:StopMovingOrSizing()
 	end)
 
+	local title = titleButton:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+	titleButton:SetPoint("LEFT", 18, -7)
+	f.title = title
+
 	self.frame       = f
 	self.scrollFrame = f.scrollFrame
 	self.editBox     = f.editBox
