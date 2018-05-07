@@ -25,12 +25,12 @@ if CURRENT_LOCALE == "enUS" then return end
 
 if CURRENT_LOCALE == "deDE" then
 
+L["/bugger"] = "/fehler"
 L["All Errors"] = "Alle Fehler"
 L["All saved errors have been deleted."] = "Alle gespeicherten Fehler wurden gelöscht."
 L["Alt-click to clear all saved errors."] = "Alt-Klick, um alle gespeicherten Fehler zu löschen."
 L["An error has been captured!"] = "Ein Fehler wurde aufgezeichnet!"
 L["Automatic"] = "Automatisch"
-L["/bugger"] = "/fehler"
 L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger kann ohne !BugGrabber nicht funktionieren. !BugGrabber ist bei Curse oder WoWInterface zu finden."
 L["Chat frame alerts"] = "Warnmeldungen im Chatfenster"
 L["Click to open the error window."] = "Klick, um das Fehler-Fenster anzuzeigen."
@@ -54,12 +54,12 @@ return end
 
 if CURRENT_LOCALE == "esES" then
 
+L["/bugger"] = "/errores"
 L["All Errors"] = "Todos errores"
 L["All saved errors have been deleted."] = "Todos los errores guardados se han borrados."
 L["Alt-click to clear all saved errors."] = "Alt-clic para borrar todos errores guardados."
 L["An error has been captured!"] = "Un error se ha capturado!"
 L["Automatic"] = "Automático"
-L["/bugger"] = "/errores"
 L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger no puede funcionar sin !BugGrabber. Encuentralo en Curse o WoWInterface."
 L["Chat frame alerts"] = "Mensajes de alerta en chat"
 L["Click to open the error window."] = "Clic para mostrar la ventana de errores."
@@ -83,12 +83,12 @@ return end
 
 if CURRENT_LOCALE == "esMX" then
 
+L["/bugger"] = "/errores"
 L["All Errors"] = "Todos errores"
 L["All saved errors have been deleted."] = "Todos los errores guardados se han borrados."
 L["Alt-click to clear all saved errors."] = "Alt-clic para borrar todos errores guardados."
 L["An error has been captured!"] = "Un error se ha capturado!"
 L["Automatic"] = "Automático"
-L["/bugger"] = "/errores"
 L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger no puede funcionar sin !BugGrabber. Encuentralo en Curse o WoWInterface."
 L["Chat frame alerts"] = "Mensajes de alerta en chat"
 L["Click to open the error window."] = "Clic para mostrar la ventana de errores."
@@ -112,12 +112,12 @@ return end
 
 if CURRENT_LOCALE == "frFR" then
 
+L["/bugger"] = "/erreurs"
 L["All Errors"] = "Toutes erreures"
 L["All saved errors have been deleted."] = "Toutes les erreurs enregistrées ont été supprimées."
 L["Alt-click to clear all saved errors."] = "Alt-clic pour effacer toutes les erreurs."
 L["An error has been captured!"] = "Une erreur a été capturée !"
 L["Automatic"] = "Automatique"
-L["/bugger"] = "/erreurs"
 L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger ne peut pas fonctionner sans !BugGrabber. Trouvez-le sur Curse ou WoWInterface."
 L["Chat frame alerts"] = "Messages d'alerte dans la discussion"
 L["Click to open the error window."] = "Cliquez pour ouvrir la fenêtre d'erreurs."
@@ -141,12 +141,12 @@ return end
 
 if CURRENT_LOCALE == "itIT" then
 
+L["/bugger"] = "/errori"
 L["All Errors"] = "Tutti errori"
 L["All saved errors have been deleted."] = "Tutti gli errori salvati sono stati cancellari."
 L["Alt-click to clear all saved errors."] = "Alt-clic per cancellare tutti gli errori salvati."
 L["An error has been captured!"] = "Un errore è stato catturato!"
 L["Automatic"] = "Automatico"
-L["/bugger"] = "/errori"
 L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger non può funzionare senza !BugGrabber. Lo si può trovare su Curse o WoWInterface."
 L["Chat frame alerts"] = "Messaggi di avviso nel chat"
 L["Click to open the error window."] = "Clicca per mostrare la finestra di errori."
@@ -170,16 +170,16 @@ return end
 
 if CURRENT_LOCALE == "ptBR" then
 
+L["/bugger"] = "/erros"
 L["All Errors"] = "Todos erros"
 L["All saved errors have been deleted."] = "Todos os erros guardados foram apogados."
 L["Alt-click to clear all saved errors."] = "Alt-clique para apagar todos os erros guardados."
 L["An error has been captured!"] = "Um erro foi capturado!"
 L["Automatic"] = "Automático"
-L["/bugger"] = "/erros"
 L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger não pode funcionar sem !BugGrabber. Procurar no Curse ou WoWInterface."
 L["Chat frame alerts"] = "Mensagens de alerta no chat"
 L["Click to open the error window."] = "Clique para mostrar a janela de erros."
-L["Click to show or hide the local variables captured with this error."] = "Clique para mostrar ou ocultar as variáveis ​​locais capturadas com este erro."
+L["Click to show or hide the local variables captured with this error."] = "Clique para mostrar ou ocultar as variáveis locais capturadas com este erro."
 L["Current Session"] = "Sessão atual"
 L["Errors"] = "Erros"
 L["Locals"] = "Locais"
@@ -226,6 +226,27 @@ return end
 
 if CURRENT_LOCALE == "koKR" then
 
+L["/bugger"] = "/버거"
+L["All Errors"] = "모든 오류"
+L["All saved errors have been deleted."] = "모든 저장된 오류가 삭제되었습니다."
+L["Alt-click to clear all saved errors."] = "Alt-클릭으로 모든 오류를 초기화 합니다."
+L["An error has been captured!"] = "모든 오류를 찾았습니다."
+L["Automatic"] = "자동"
+L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "!BugGrabber 애드온 없이 사용할 수 없습니다. 애드온 사이트에서 다운로드 하세요."
+L["Chat frame alerts"] = "대화창에 알림"
+L["Click to open the error window."] = "클릭하여 오류 창을 엽니다."
+L["Click to show or hide the local variables captured with this error."] = "클릭하여 오류와 함께 찾은 변수값을 표시하거나 숨깁니다."
+L["Current Session"] = "현재 접속"
+L["Errors"] = "오류"
+L["Locals"] = "변수"
+L["Minimap icon"] = "미니맵 아이콘"
+L["Previous Session"] = "이전 접속"
+L["Right-click for options."] = "오른쪽 클릭으로 애드온 설정을 변경합니다."
+L["Shift-click to reload the UI."] = "Shift-클릭으로 UI를 재시작합니다."
+L["Shows the errors captured by !BugGrabber."] = "!BugGrabber 에서 찾은 오류를 표시합니다."
+L["Sound alerts"] = "소리 알림"
+L["There are no errors to display."] = "여기에 표시된 오류는 없습니다."
+
 return end
 
 ------------------------------------------------------------------------
@@ -234,12 +255,12 @@ return end
 
 if CURRENT_LOCALE == "zhCN" then
 
+L["/bugger"] = "/出错"
 L["All Errors"] = "所有出错"
 L["All saved errors have been deleted."] = "所有保存出错已经删除。"
 L["Alt-click to clear all saved errors."] = "按住Alt点击清除所有保存的出错。"
 L["An error has been captured!"] = "已捕做到一个出错！"
 L["Automatic"] = "自动"
-L["/bugger"] = "/出错"
 L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger基于!BugGrabber运作。请到Curse或WoWInterface搜寻它。"
 L["Chat frame alerts"] = "聊天框警报"
 L["Click to open the error window."] = "点击打开出错窗口。"
@@ -263,12 +284,12 @@ return end
 
 if CURRENT_LOCALE == "zhTW" then
 
+L["/bugger"] = "/錯誤"
 L["All Errors"] = "所有錯誤"
 L["All saved errors have been deleted."] = "所有儲存的錯誤已被刪除。"
 L["Alt-click to clear all saved errors."] = "Alt-點擊以清除所有儲存的錯誤。"
 L["An error has been captured!"] = "一個錯誤已被捕捉！"
 L["Automatic"] = "自動"
-L["/bugger"] = "/錯誤"
 L["Bugger can't function without !BugGrabber. Find it on Curse or WoWInterface."] = "Bugger沒有!BugGrabber將無法運作。請在Curse或WoWInterface尋找它。"
 L["Chat frame alerts"] = "聊天框架警告"
 L["Click to open the error window."] = "點擊開啟錯誤視窗。"
