@@ -361,7 +361,7 @@ end
 
 function Bugger:SetupFrame()
 	local f = CreateFrame("Frame", "BuggerFrame", UIParent, "UIPanelDialogTemplate")
-	f:SetFrameStrata("TOOLTIP")
+	f:SetFrameStrata("FULLSCREEN_DIALOG")
 	f:SetMovable(true)
 	f:SetClampedToScreen(true)
 	f:Hide()
@@ -516,6 +516,7 @@ function Bugger:SetupFrame()
 	options:SetScript("OnClick", function(self, button)
 		if button ~= "RightButton" then return end
 		ToggleDropDownMenu(nil, nil, Bugger.menu, self, 0, 0, nil, nil, 10)
+		Bugger.menu:SetFrameStrata("TOOLTIP")
 	end)
 	f.options = options
 
@@ -571,6 +572,7 @@ end
 ------------------------------------------------------------------------
 
 local menu = CreateFrame("Frame", "BuggerMenu", UIParent, "UIDropDownMenuTemplate")
+menu:SetToplevel(true)
 menu.displayMode = "MENU"
 
 menu.chatGet = function(self)
