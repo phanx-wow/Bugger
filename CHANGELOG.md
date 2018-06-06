@@ -1,3 +1,9 @@
+### Version 7.3.5.0
+
+* Fixed the options menu appearing behind the Bugger window
+* Added an option to hide "action blocked" errors, most of which have no effect on anything
+* Added Korean translation from next96
+
 ### Version 7.1.0.0
 
 * Updated for WoW 7.1
@@ -28,7 +34,7 @@
 ### Version 6.0.3.28-beta
 
 * Local variables are no longer shown by default, as they are almost always irrelevant. Press the "Locals" button to show them for the current error.
-* Pressing Esc now closes the error frame.
+* Pressing the Escape key now closes the error frame
 
 ### Version 6.0.2.22-beta
 
