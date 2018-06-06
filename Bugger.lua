@@ -23,6 +23,7 @@ _G[BUGGER] = Bugger
 local defaults = {
 	chat  = true,  -- show a message in the chat frame when an error is captured
 	sound = false, -- play a sound when an error is captured
+	ignoreActionBlocked = true, -- don't show ADDON_ACTION_BLOCKED errors
 	minimapAuto = true,
 	minimap = {
 		hide = true,
@@ -118,30 +119,32 @@ end)
 
 ------------------------------------------------------------------------
 
-function Bugger:GetNumErrors(session)
+function Bugger:GetNumErrors(session, includeIndices)
 	local errors = BugGrabber:GetDB()
-	local total = #errors
-	if total == 0 then return 0 end
+	if #errors == 0 then return 0 end
 
 	if session == "all" then
-		return total, 1, total
-	end
-
-	if session == "previous" then
+		session = nil
+	elseif session == "previous" then
 		session = BugGrabber:GetSessionId() - 1
 	else
 		session = BugGrabber:GetSessionId()
 	end
 
-	local total, first, last = 0
+	local total = 0
+	local indices = includeIndices and {} or nil
+
 	for i = 1, #errors do
-		if errors[i].session == session then
+		local err = errors[i]
+		if (err.session == session or not session)
+		and not (self.db.ignoreActionBlocked and err.message:find("%[ADDON_ACTION_BLOCKED%]")) then
 			total = total + 1
-			first = first or i
-			last = i
+			if includeIndices then
+				table.insert(indices, i)
+			end
 		end
 	end
-	return total, first, last
+	return total, indices
 end
 
 ------------------------------------------------------------------------
@@ -157,6 +160,10 @@ end
 	}
 ]]
 function Bugger:BugGrabber_BugGrabbed(callback, err)
+	if self.db.ignoreActionBlocked and err.message:find("%[ADDON_ACTION_BLOCKED%]") then
+		return
+	end
+
 	self.dataObject.text = self:GetNumErrors()
 	self.dataObject.icon = ICON_RED
 
@@ -252,7 +259,7 @@ end
 
 ------------------------------------------------------------------------
 
-function Bugger:ShowError(index, showLocals)
+function Bugger:ShowError(which, showLocals)
 	if not self.frame then
 		self:SetupFrame()
 	end
@@ -260,10 +267,9 @@ function Bugger:ShowError(index, showLocals)
 	self.frame:Show()
 
 	local errors = BugGrabber:GetDB()
-	local total, first, last = self:GetNumErrors(self.session)
+	local total, indices = self:GetNumErrors(self.session, true)
 
 	if total == 0 then
-		self.error = 0
 		self.editBox:SetText(c.GRAY .. L["There are no errors to display."])
 		self.editBox:SetCursorPosition(0)
 		self.editBox:ClearFocus()
@@ -277,13 +283,16 @@ function Bugger:ShowError(index, showLocals)
 		return
 	end
 
-	local err = index and index >= first and index <= last and errors[index]
+	local index = which and indices[which]
+	local err = index and errors[index]
 	if not err then
-		index = last
+		which = #indices
+		index = indices[which]
 		err = errors[index]
 	end
 
-	self.first, self.last, self.error = first, last, index
+	self.currentIndex = which
+	self.lastIndex = #indices
 
 	local sdiff = BugGrabber:GetSessionId() - err.session
 	if self.session == "all" and sdiff > 0 then
@@ -307,11 +316,11 @@ function Bugger:ShowError(index, showLocals)
 
 	self.scrollFrame:SetVerticalScroll(0)
 
-	self.indexLabel:SetFormattedText("%d / %d", index + 1 - first, total)
+	self.indexLabel:SetFormattedText("%d / %d", which, total)
 
 	self.clear:Enable()
-	self.previous:SetEnabled(index > first)
-	self.next:SetEnabled(index < last)
+	self.next:SetEnabled(which < #indices)
+	self.previous:SetEnabled(which > 1)
 end
 
 ------------------------------------------------------------------------
@@ -417,7 +426,7 @@ function Bugger:SetupFrame()
 	f.showLocals = showLocals
 
 	showLocals:SetScript("OnClick", function(self)
-		Bugger:ShowError(Bugger.error, self:GetHighlightTexture():GetDrawLayer() == "HIGHLIGHT")
+		Bugger:ShowError(Bugger.currentIndex, self:GetHighlightTexture():GetDrawLayer() == "HIGHLIGHT")
 	end)
 
 	local next = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
@@ -428,9 +437,9 @@ function Bugger:SetupFrame()
 
 	next:SetScript("OnClick", function(self)
 		if IsShiftKeyDown() then
-			Bugger:ShowError(Bugger.last)
+			Bugger:ShowError(Bugger.lastIndex)
 		else
-			Bugger:ShowError(Bugger.error + 1)
+			Bugger:ShowError(Bugger.currentIndex + 1)
 		end
 	end)
 
@@ -442,9 +451,9 @@ function Bugger:SetupFrame()
 
 	previous:SetScript("OnClick", function(self)
 		if IsShiftKeyDown() then
-			Bugger:ShowError(Bugger.first)
+			Bugger:ShowError(1)
 		else
-			Bugger:ShowError(Bugger.error - 1)
+			Bugger:ShowError(Bugger.currentIndex - 1)
 		end
 	end)
 
@@ -463,7 +472,7 @@ function Bugger:SetupFrame()
 	local function clickTab(self)
 		Bugger:ShowSession(self.session)
 	end
-	
+
 	self.tabs = {}
 	f:SetFrameLevel(tabLevel + 1)
 	for i = 1, 3 do
@@ -541,8 +550,7 @@ function Bugger:SetupFrame()
 	self.clear       = f.clear
 	self.reload      = f.reload
 	self.showLocals  = f.showLocals
-	
-	self.error = 0
+
 	self.session = "current"
 end
 
@@ -577,6 +585,14 @@ menu.soundGet = function()
 end
 menu.soundSet = function(_, _, _, checked)
 	Bugger.db.sound = checked
+end
+
+menu.ignoreBlockedGet = function()
+	return Bugger.db.ignoreActionBlocked
+end
+menu.ignoreBlockedSet = function(_, _, _, checked)
+	Bugger.db.ignoreActionBlocked = checked
+	Bugger:ShowSession(Bugger.session)
 end
 
 menu.iconShowGet = function()
@@ -618,7 +634,7 @@ end
 menu.initialize = function(_, level)
 	if level == 1 then
 		local info = UIDropDownMenu_CreateInfo()
-		
+
 		info.text = BUGGER
 		info.isTitle = 1
 		info.notCheckable = 1
@@ -635,13 +651,21 @@ menu.initialize = function(_, level)
 
 	--[[
 		info.text = L["Sound alerts"]
-		info.checked = Bugger.db.sound
+		info.checked = menu.soundGet
 		info.func = menu.soundSet
 		info.isNotRadio = 1
 		info.keepShownOnClick = 1
 		UIDropDownMenu_AddButton(info, level)
 		wipe(info)
 	]]
+
+		info.text = L["Ignore blocked actions"]
+		info.checked = menu.ignoreBlockedGet
+		info.func = menu.ignoreBlockedSet
+		info.isNotRadio = 1
+		info.keepShownOnClick = 1
+		UIDropDownMenu_AddButton(info, level)
+		wipe(info)
 
 		info.text = L["Minimap icon"]
 		info.hasArrow = 1
@@ -660,18 +684,16 @@ menu.initialize = function(_, level)
 		info.text = SHOW
 		info.checked = menu.iconShowGet
 		info.func = menu.iconShowSet
-		info.arg1 = false
 		UIDropDownMenu_AddButton(info, level)
 
 		info.text = HIDE
 		info.checked = menu.iconHideGet
 		info.func = menu.iconHideSet
-		info.arg1 = true
 		UIDropDownMenu_AddButton(info, level)
 
 		info.text = L["Automatic"]
+		info.checked = menu.iconAutoGet
 		info.func = menu.iconAutoSet
-		info.checked = Bugger.db.minimapAuto
 		UIDropDownMenu_AddButton(info, level)
 	end
 end
