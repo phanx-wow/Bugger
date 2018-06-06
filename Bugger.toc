@@ -9,6 +9,8 @@
 ## Notes-frFR: Afficher les erreurs capturés par !BugGrabber.
 ## Notes-itIT: Mostrare gli errori catturati da !BugGrabber.
 ## Notes-ptBR: Mostrar os erros capturados por !BugGrabber.
+## Notes-ruRU: Отображает ошибки отловленные !BugGrabber'ом.
+## Notes-koKR: !BugGrabber 에서 찾은 오류를 표시합니다.
 ## Notes-zhCN: 显示 !BugGrabber捕获的出错。
 ## Notes-zhTW: 顯示經由!BugGrabber捕捉的錯誤。
 
