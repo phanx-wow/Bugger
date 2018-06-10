@@ -160,7 +160,7 @@ end
 	}
 ]]
 function Bugger:BugGrabber_BugGrabbed(callback, err)
-	if self.db.ignoreActionBlocked and err.message:find("%[ADDON_ACTION_BLOCKED%]") then
+	if self.db.ignoreActionBlocked and err and err.message and err.message:find("%[ADDON_ACTION_BLOCKED%]") then
 		return
 	end
 
