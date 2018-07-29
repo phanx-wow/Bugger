@@ -1,3 +1,7 @@
+### Version 8.0.0.0
+
+* Compatible with WoW 8.0
+
 ### Version 7.3.5.0
 
 * Fixed the options menu appearing behind the Bugger window
