@@ -33,4 +33,4 @@ Libs\PhanxAddonStub\AddonStub.lua
 
 Localization.lua
 Bugger.lua
-Options.lua
+# Options.lua
